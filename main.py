@@ -2,7 +2,7 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
+from ete3 import Tree
 from Bio.Seq import Seq
 def print_hi(seq):
     # Use a breakpoint in the code line below to debug your script.
