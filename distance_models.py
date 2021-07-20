@@ -1,12 +1,12 @@
 import math
 import random
-
 import numpy
+import cogent3
 from Bio.Seq import Seq
 
-# for test:
-# calculation of genetic distance between two homologous sequences,
-# that is the number of of substitutions that have accumulated between them since they diverged from their common ancestor.
+
+# for test: calculation of genetic distance between two random homologous sequences, that is the number of of
+# substitutions that have accumulated between them since they diverged from their common ancestor.
 def test():
     N = 1000  # length of the seq
     M = 2000  # random substitution freq 1/M
@@ -16,18 +16,20 @@ def test():
     for t in range(0, R - 1):
         seq = gen_random_seq(N)
         seq1 = seq
-        print(seq)
+        # print(seq)
         for i in range(0, M - 1):
             n = random.randint(0, N - 1)
             temp = list(str(seq1))
             temp[n] = random.choice("CGTA")
+            seq1 = Seq(''.join(temp))
             old = str(seq)
             new = str(seq1)
-            seq1 = Seq(''.join(temp))
             difference = sum(1 for a, b in zip(old, new) if a != b)
             result[i] = difference
+            # print(result[i])
             i += 1
         mean_t[t] = numpy.mean(result)
+        # print(mean_t)
         t += 1
     mean = numpy.mean(result)
     print(JC_distance(mean / N, N))
@@ -48,3 +50,6 @@ def gen_random_seq(length):
     DNA = "".join(random.choices(letters, k=length))
     seq = Seq(DNA)
     return seq
+
+
+print(cogent3.evolve.models.models)

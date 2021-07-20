@@ -3,8 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from Bio.Seq import Seq
-
-from distance_models import test
+import distance_models
 
 
 def print_hi(seq):
@@ -12,7 +11,7 @@ def print_hi(seq):
     # print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
     my_seq = Seq(seq)
     print(my_seq)
-    test()
+    distance_models.test()
 
 
 # Press the green button in the gutter to run the script.
