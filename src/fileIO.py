@@ -17,5 +17,5 @@ def convert_phy_fasta(phy_path, fasta_path):
     print("Converted %i records" % count)
 
 
-read_from_phy("../data/dna.phy")
-convert_phy_fasta("../data/dna.phy", "./data/dna.fasta")
+read_from_phy("../data/Aligned sequences/dna.phy")
+convert_phy_fasta("../data/Aligned sequences/dna.phy", "./data/dna.fasta")
