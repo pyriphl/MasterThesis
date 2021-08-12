@@ -18,3 +18,13 @@ def tree_generation_simphy(num_taxa: int, height: float, sub_rate: float, output
                    '-SP f:1 -rl f:100 ' + '-o ../' + output + '-sl f:' + num_taxa + '-st f:' + height + '-su f:' + sub_rate
     # os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -rs 1 -rg 1 -lt f:0.0000005 -o ../SimPhy_test')
     os.system(command)
+
+
+def sequence_generation_indelible():
+    # TODO
+    return
+
+
+def sequence_generation_seqgen():
+    # TODO
+    return
