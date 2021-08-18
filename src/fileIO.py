@@ -1,6 +1,8 @@
 from Bio import SeqIO
+from Bio import Phylo
 
 
+# type: fasta
 def read_from(path: str, input_type: str):
     result = []
     with open(path) as input_handle:
@@ -8,6 +10,12 @@ def read_from(path: str, input_type: str):
             print(record)
             result.append(record)
     return result
+
+
+# type:newick
+def load_tree(path: str, type: str):
+    g_tree = Phylo.read(path, type)
+    return g_tree
 
 
 def convert_phy_fasta(phy_path, fasta_path):
