@@ -11,7 +11,7 @@ def calculate_distance_aligned_seq(input_seqs: str, model: str):
     return dists
 
 
-def align_seq(seq1: str, seq2: str):
+def align_seq(seq1, seq2):
     aligner = Align.PairwiseAligner()
     alignments = aligner.align(seq1, seq2)
-    return str(alignments), alignments.score
+    return alignments
