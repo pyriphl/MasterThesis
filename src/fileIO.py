@@ -1,7 +1,12 @@
+import os
+import shutil
+
 from Bio import SeqIO
 from Bio import Phylo
 from Bio import AlignIO
 
+ALN_PATH = 'data/AlignedSequences/'
+SIMPHY_PATH = 'data/Simphy/HGT/1/'
 
 # type: fasta
 # return: list of Biopython record
@@ -28,6 +33,9 @@ def convert_phy_fasta(phy_path, fasta_path):
     count = SeqIO.convert(phy_path, "phylip", fasta_path, "fasta")
     print("Converted %i records" % count)
 
+
+def delete_aln_file(file_name):
+    os.remove(ALN_PATH+file_name)
 # test
-# read_from_phy("../data/Aligned sequences/dna.phy")
-# convert_phy_fasta("../data/Aligned sequences/dna.phy", "./data/dna.fasta")
+# read_from_phy("../data/AlignedSequences/dna.phy")
+# convert_phy_fasta("../data/AlignedSequences/dna.phy", "./data/dna.fasta")
