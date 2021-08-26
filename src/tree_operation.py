@@ -26,3 +26,7 @@ def terminal_neighbor_dists(self):
     """Return a list of distances between adjacent terminals."""
     return [self.distance(*i) for i in generate_pairs(self.find_clades(terminal=True))]
 
+
+def get_edit_distance():
+    # TODO
+    return

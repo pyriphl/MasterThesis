@@ -1,13 +1,14 @@
 import subprocess
-from cogent3 import load_aligned_seqs, get_model
+from cogent3 import load_aligned_seqs, get_model, make_aligned_seqs
 from cogent3.evolve import distance
 from Bio import Align
 
 
-def calculate_distance_aligned_seq(input_seqs: str, model: str):
+def calculate_distance_aligned_seq(input_seqs, model: str):
     if not check_input(input_seqs):
+        print('wrong number of input')
         return -1
-    aln = load_aligned_seqs(input_seqs, moltype="dna", format="fasta")
+    aln = make_aligned_seqs(input_seqs, moltype="dna")
     d = distance.EstimateDistances(aln, submodel=get_model(model))
     d.run(show_progress=False)
     dists = d.get_pairwise_distances()
@@ -21,11 +22,12 @@ def align_pair_seq(seq1, seq2):
 
 
 def align_mult_seq(in_path: str, out_path: str):
+    # '>/dev/null 2>&1' is used to supress execution log on the command line
     subprocess.check_output('muscle -in ' + in_path + ' -out ' + out_path + '>/dev/null 2>&1', shell=True)
     # os.system('muscle -in ' + in_path + ' -out ' + out_path)
-    # cline = MuscleCommandline(input=in_path, out=out_path)
-    # print(cline)
 
 
-def check_input(input_seq:str) -> bool:
+def check_input(input_seqs):
+    if len(input_seqs) != 2:
+        return False
     return True

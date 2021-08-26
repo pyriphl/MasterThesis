@@ -1,6 +1,6 @@
 from cogent3 import available_distances
 
-from fileIO import read_from, load_tree, delete_aln_file, SIMPHY_PATH, ALN_PATH
+from fileIO import read_from, load_tree, delete_aln_file, SIMPHY_PATH, ALN_PATH, load_aln
 from seq_operations import calculate_distance_aligned_seq, align_mult_seq
 from tree_operation import lookup_by_names
 
@@ -11,7 +11,10 @@ if __name__ == '__main__':
     taxa = tree.find_clades(terminal=True)
     tree_by_name = lookup_by_names(tree)
 
-    seqs = align_mult_seq(SIMPHY_PATH + 'data_1.fasta', ALN_PATH + 'data_1.fasta')
+    align_mult_seq(SIMPHY_PATH + 'data_1.fasta', ALN_PATH + 'data_1.fasta')
     # delete_aln_file('data_1.fasta')
-    distance = calculate_distance_aligned_seq(ALN_PATH + 'data_1.fasta', 'GTR')
+    seq = load_aln(ALN_PATH + 'data_1.fasta', 'fasta')
+    pair_seq = {seq[0].name: seq[0].seq, seq[1].name: seq[1].seq}
+    distance = calculate_distance_aligned_seq(pair_seq, 'GTR')
+    print(distance)
 
