@@ -7,5 +7,6 @@
 ### Necessary external packages:
 - MUSCLE
 - SimPhy
+- INDELible
 - Biopython
 - PyCongent 3
