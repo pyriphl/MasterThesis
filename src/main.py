@@ -15,6 +15,6 @@ if __name__ == '__main__':
     # delete_aln_file('data_1.fasta')
     seq = load_aln(ALN_PATH + 'data_1.fasta', 'fasta')
     pair_seq = {seq[0].name: seq[0].seq, seq[1].name: seq[1].seq}
-    distance = calculate_distance_aligned_seq(pair_seq, 'GTR')
-    print(distance)
+    gtr_distance = calculate_distance_aligned_seq(pair_seq, 'GTR')
+    print(gtr_distance)
 
