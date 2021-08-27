@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 """variables"""
 
@@ -12,6 +13,7 @@ import os
 
 """input"""
 
+
 # -sl f: num_taxa
 # -st ln:21.25,0.2 tree height ln(logNormal):location,scale or f:fixed_point
 # -su ln:-21.9,0.1  substitution rate ln:location,scale or f:fixed_point
@@ -20,9 +22,12 @@ import os
 
 def tree_generation_simphy(num_taxa: int, height: float, sub_rate: float, output_path: str):
     command: str = './SimPhy_1.0.2/bin/simphy_lnx64 -sb f:5e-09 -sd f:4.9e-09 -gt f:4.9e-10 -lt sl:0.0,1.0,gt -lk 0 ' \
-                   '-SP f:1 -rl f:100' + ' -o ../' + output_path + ' -sl f:' + num_taxa + ' -st f:' + height + ' -su f:' + sub_rate
+                   '-SP f:10 -rl f:100' + ' -o ' + output_path + ' -sl f:' + str(num_taxa) + ' -st f:' + str(
+        height) + ' -su f:' + str(sub_rate)
     # os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -rs 1 -rg 1 -lt f:0.0000005 -o ../SimPhy_test')
+    # subprocess.check_output(command, shell=True)
     os.system(command)
+    print(command)
 
 
 # input_path: path of input tree
@@ -31,12 +36,8 @@ def tree_generation_simphy(num_taxa: int, height: float, sub_rate: float, output
 def sequence_generation_indelible(input_path: str, config_path: str):
     # command: str = './SimPhy_1.0.2/scripts/INDELIble_wrapper.pl SimPhy_1.0.2/ILS
     # SimPhy_1.0.2/configuration_files/INDELible_simple.txt 22 1'
-    command: str = './SimPhy_1.0.2/scripts/INDELIble_wrapper.pl SimPhy_1.0.2/' + input_path + 'SimPhy_1.0.2' \
-                                                                                              '/configuration_files/' \
-                   + config_path + ' 22 1 '
+    command: str = './SimPhy_1.0.2/scripts/INDELIble_wrapper.pl ' + input_path + ' ' + config_path + ' 22 1 '
+    print(command)
     os.system(command)
 
 
-def sequence_generation_seqgen():
-    # TODO
-    return

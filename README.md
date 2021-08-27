@@ -4,7 +4,7 @@
 - T# test related
 - P# project setup and structure
 
-### Necessary external packages:
+### Necessary external libraries:
 - MUSCLE
 - SimPhy
 - INDELible

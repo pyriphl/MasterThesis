@@ -44,6 +44,10 @@ def convert_phy_fasta(phy_path, fasta_path):
 
 def delete_aln_file(file_name):
     os.remove(ALN_PATH + file_name)
+
+
+def delete_folder(path: str):
+    shutil.rmtree(path)
 # test
 # read_from_phy("../data/AlignedSequences/dna.phy")
 # convert_phy_fasta("../data/AlignedSequences/dna.phy", "./data/dna.fasta")
