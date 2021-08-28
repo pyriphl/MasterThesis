@@ -9,8 +9,11 @@ from src.tree_operation import lookup_by_names
 # test load newick tree from file
 def test_load_tree():
     tree = load_tree(SIMPHY_PATH + 'g_trees1.trees', 'newick')
-    taxa = tree.find_clades(terminal=True)
-    tree_by_name = lookup_by_names(tree)
+    taxa = tree.get_terminals()
+    for taxon in taxa:
+        print(taxon.name)
+        print(taxon.branch_length)
+    print(tree.distance(taxa[0], taxa[1]))
     Phylo.draw(tree)
 
 
