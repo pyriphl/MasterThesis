@@ -31,3 +31,9 @@ def check_input(input_seqs):
     if len(input_seqs) != 2:
         return False
     return True
+
+
+def get_by_name(self, name: str):
+    for seq in self:
+        if seq.name == name:
+            return seq
