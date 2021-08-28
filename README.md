@@ -6,7 +6,7 @@
 
 ### Necessary external libraries:
 - MUSCLE
-- SimPhy
-- INDELible
+- SimPhy (must be installed under the project folder)
+- INDELible (need a compiled file in Simphy directory, details see Simphy doc)
 - Biopython
 - PyCongent 3
