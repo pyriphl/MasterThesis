@@ -5,9 +5,6 @@ from Bio import Align
 
 
 def calculate_distance_aligned_seq(input_seqs, model: str):
-    if not check_input(input_seqs):
-        print('wrong number of input')
-        return -1
     aln = make_aligned_seqs(input_seqs, moltype="dna")
     d = distance.EstimateDistances(aln, submodel=get_model(model))
     d.run(show_progress=False)
@@ -21,9 +18,9 @@ def align_pair_seq(seq1, seq2):
     return alignments
 
 
-def align_mult_seq(in_path: str, out_path: str):
+# def align_mult_seq(in_path: str, out_path: str):
     # '>/dev/null 2>&1' is used to supress execution log on the command line
-    subprocess.check_output('muscle -in ' + in_path + ' -out ' + out_path + '>/dev/null 2>&1', shell=True)
+    # subprocess.check_output('muscle -in ' + in_path + ' -out ' + out_path + '>/dev/null 2>&1', shell=True)
     # os.system('muscle -in ' + in_path + ' -out ' + out_path)
 
 
