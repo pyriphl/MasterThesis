@@ -3,7 +3,7 @@ from Bio import Phylo
 
 import tests
 from src.fileIO import delete_folder, load_tree, load_aln, SIMPHY_PATH, ALN_PATH
-from src.show import plot_points, plot_graph, show_table
+from src.show import plot_points, show_table
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
 from src.seq_operations import get_by_name, calculate_distance_aligned_seq
 from src.tree_operation import lookup_by_names
@@ -26,7 +26,7 @@ def hgt_edit_tree_distance():
                 tree_distance[i][j] = tree.distance(name_tree.get(names[i]), name_tree.get(names[j]))
     # print(tree_distance)
     # Phylo.draw(tree)
-    return gtr_distance, tree_distance, names
+    return gtr_distance.to_array(), tree_distance, names
 
 if __name__ == '__main__':
     # tests.test_load_tree()
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # delete_folder("data/Simphy/test")
     # sequence_generation_indelible("data/Simphy/HGT/", "SimPhy_1.0.2/configuration_files/INDELible_simple.txt")
     gtr_distance, tree_distance, names = hgt_edit_tree_distance()
-    print(tree_distance)
-    show_table(gtr_distance, tree_distance, names)
-    # plot_graph(gtr_distance.to_array(), 'cubic')
-    plot_points(gtr_distance.to_array(), tree_distance)
+    show_table(gtr_distance, names, 'GTR')
+    show_table(tree_distance, names, 'Tree')
+    # plot_graph(tree_distance, 'cubic')
+    plot_points(gtr_distance, tree_distance, names)
