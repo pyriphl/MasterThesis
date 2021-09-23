@@ -1,5 +1,7 @@
 import itertools
 
+import numpy
+
 
 def lookup_by_names(tree):
     names = {}
@@ -27,3 +29,10 @@ def terminal_neighbor_dists(self):
     return [self.distance(*i) for i in generate_pairs(self.find_clades(terminal=True))]
 
 
+def pairwaise_terminal_dist(names, tree):
+    tree_distance = numpy.zeros((len(names), len(names)))
+    name_tree = lookup_by_names(tree)
+    for i in range(0, len(names)):
+        for j in range(0, len(names)):
+            tree_distance[i][j] = tree.distance(name_tree.get(names[i]), name_tree.get(names[j]))
+    return tree_distance
