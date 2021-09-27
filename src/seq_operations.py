@@ -1,4 +1,6 @@
 import subprocess
+
+import numpy
 from cogent3 import load_aligned_seqs, get_model, make_aligned_seqs
 from cogent3.evolve import distance
 from Bio import Align
@@ -34,10 +36,27 @@ def get_by_name(self, name: str):
             return seq
 
 
-# TODO add sliding window
-def prep_input_seq(seqs, tree, window_size):
+def slice_seq(seq, start, end):
+    return seq[start:end]
+
+
+def prep_input_seq(seqs, tree, s_position, e_position):
     input_seqs = {}
     taxa = tree.get_terminals()
     for t in taxa:
-        input_seqs[t.name] = get_by_name(seqs, t.name)
+        seq = get_by_name(seqs, t.name)
+        input_seqs[t.name] = seq[s_position:e_position]
     return input_seqs
+
+
+def dist_window_average(seqs, tree, model: str, window_size: int):
+    dists = []
+    if window_size > len(seqs[0]):
+        return
+    for index in range(0, len(seqs[0]) - window_size):
+        start = index
+        end = index + len(seqs[0])
+        input_seqs = prep_input_seq(seqs, tree, start, end)
+        names, dist = calculate_distance_aligned_seq(input_seqs, model)
+        dists.append(dist.to_array())
+    return names, numpy.mean(dists, axis=0)
