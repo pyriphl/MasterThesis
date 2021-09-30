@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib import style
 from matplotlib import ticker
 from scipy.interpolate import griddata
 from tabulate import tabulate
@@ -36,7 +37,11 @@ def interpolation(table, model):
     return grid_x, grid_y, grid_z
 
 
-def set_axis_labels(axis, x_label, y_label, z_label, ticker_positions, ticker_labels, figure_name):
+def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name):
+    ticker_positions = []
+    for i in range(len(ticker_labels)):
+        ticker_positions.append(i)
+
     axis.set_xlabel(x_label)
     axis.set_ylabel(y_label)
     axis.set_zlabel(z_label)
@@ -49,7 +54,19 @@ def set_axis_labels(axis, x_label, y_label, z_label, ticker_positions, ticker_la
     axis.yaxis.set_major_formatter(ticker.FixedFormatter(ticker_labels))
 
 
-def plot_points(t1, t2, labels):
+def plot_surface(data, labels, type: str):
+    t1_X, t1_Y, t1_Z = interpolation(data, type)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    # Plot a basic wireframe.
+    ax.plot_wireframe(t1_X, t1_Y, t1_Z, rstride=10, cstride=10, color='C0')
+
+    set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, 'gtr distance')
+    plt.show()
+
+
+def plot_points_scatter(t1, t2, labels):
     t1_xs = []
     t1_ys = []
     t1_zs = []
@@ -70,25 +87,32 @@ def plot_points(t1, t2, labels):
             t2_zs.append(t2[i][j])
             ax1.scatter(t2_xs, t2_ys, t2_zs, marker='^')
 
-    t1_X, t1_Y, t1_Z = interpolation(t1, 'cubic')
-    t2_X, t2_Y, t2_Z = interpolation(t2, 'cubic')
+    set_axis_labels(ax1, 'seq names', 'seq names', 'distance', labels, 'scattered points')
 
-    fig2 = plt.figure()
-    ax2 = fig2.add_subplot(projection='3d')
+    plt.show()
 
-    fig3 = plt.figure()
-    ax3 = fig3.add_subplot(projection='3d')
 
-    # Plot a basic wireframe.
-    ax2.plot_wireframe(t1_X, t1_Y, t1_Z, rstride=10, cstride=10, color='C0')
-    ax3.plot_wireframe(t2_X, t2_Y, t2_Z, rstride=10, cstride=10, color='C1')
+def plot_histogram_3d(t1, labels):
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    x_data, y_data = np.meshgrid(np.arange(t1.shape[1]) + 0.25,
+                                 np.arange(t1.shape[0]) + 0.25, indexing='ij')
+    # Flatten out the arrays so that they may be passed to "ax.bar3d".
+    # Basically, ax.bar3d expects three one-dimensional arrays:
+    # x_data, y_data, z_data. The following call boils down to picking
+    # one entry from each array and plotting a bar to from
+    # (x_data[i], y_data[i], 0) to (x_data[i], y_data[i], z_data[i]).
+    #
+    x_data = x_data.ravel()
+    y_data = y_data.ravel()
+    z_data = t1.flatten()
 
-    positions = []
-    for i in range(len(labels)):
-        positions.append(i)
+    dx = dy = 0.5 * np.ones(len(z_data))
 
-    set_axis_labels(ax1, 'seq names', 'seq names', 'distance', positions, labels, 'scattered points')
-    set_axis_labels(ax2, 'seq names', 'seq names', 'distance', positions, labels, 'gtr distance')
-    set_axis_labels(ax3, 'seq names', 'seq names', 'distance', positions, labels, 'tree distance')
+    ax.bar3d(x_data,
+             y_data,
+             np.zeros(len(z_data)),
+             dx, dy, z_data, color='#00ceaa')
 
+    set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, 'histogram')
     plt.show()
