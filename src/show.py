@@ -114,5 +114,84 @@ def plot_histogram_3d(t1, labels):
              np.zeros(len(z_data)),
              dx, dy, z_data, color='#00ceaa')
 
-    set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, 'histogram')
+    set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, '3d histogram')
+    plt.show()
+
+
+def build_pair_label(labels):
+    # number of taxa entries
+    result = []
+    n = len(labels)
+    # build new labels
+    for i in range(0, n):
+        for j in range(i + 1, n):
+            tag = '(' + labels[i] + ', ' + labels[j] + ')'
+            result.append(tag)
+    return result
+
+
+def build_dist_list(t):
+    result = []
+    # number of taxa entries
+    n = len(t[0])
+    # build new list
+    for i in range(0, n):
+        for j in range(i + 1, n):
+            result.append(t[i][j])
+    return result
+
+
+def plot_histogram_2d(t1, labels):
+    view_labels = build_pair_label(labels)
+    pos = np.arange(len(view_labels))  # the label locations
+    entry = build_dist_list(t1)
+    # print(len(entry))
+    # print(len(view_labels))
+    plt.barh(pos, entry, align='center', alpha=0.5)
+    plt.yticks(pos, view_labels)
+    plt.xlabel('distance')
+    plt.ylabel('paired seq names')
+    plt.title('2d histogram')
+
+    plt.show()
+
+
+def plot_histogram_2d_onplanes(t1, labels):
+    fig = plt.figure()
+    entry = t1.reshape(-1)
+    pos = np.arange(len(labels))
+    ax = fig.add_subplot(projection='3d')
+    for i in range(0, len(labels)):
+        # Plot the bar graph given by xs and ys on the plane y=k with 80% opacity.
+        ax.bar(pos, t1[i], zs=i, zdir='y', alpha=0.9)
+
+    set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, '2d histogram on differenst planes')
+
+    plt.show()
+
+def plot_histogram_2d_group(t1, labels):
+    n_groups = len(labels)
+    # create plot
+    fig, ax = plt.subplots()
+    index = np.arange(n_groups)
+    bar_width = 0.10
+    opacity = 0.8
+
+    for i in range(0, n_groups):
+        rect = plt.bar(index+i*bar_width, t1[i], bar_width,
+                     alpha=opacity, label = labels[i])
+
+    # rect1 = plt.bar(index+1*bar_width, t1[1], bar_width,
+    #                  alpha=opacity, label = labels[1])
+
+    # rect2 = plt.bar(index+2*bar_width, t1[2], bar_width,
+    #                  alpha=opacity, label = labels[2])
+
+    plt.xlabel('seq name')
+    plt.ylabel('distance')
+    plt.title('grouped 2d histogram')
+    plt.xticks(index, labels)
+    plt.legend()
+
+    plt.tight_layout()
     plt.show()

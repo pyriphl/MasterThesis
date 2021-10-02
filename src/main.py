@@ -4,7 +4,8 @@ from Bio import Phylo
 
 import tests
 from src.fileIO import delete_folder, load_tree, load_aln, SIMPHY_PATH, ALN_PATH
-from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d
+from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d, plot_histogram_2d, \
+    plot_histogram_2d_onplanes, plot_histogram_2d_group
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
 from src.seq_operations import get_by_name, calculate_distance_aligned_seq, prep_input_seq, dist_window_average
 from src.tree_operation import lookup_by_names, pairwaise_terminal_dist
@@ -36,5 +37,8 @@ if __name__ == '__main__':
     show_table(tree_distance, names, 'Tree')
     # plot_points_scatter(model_distance, tree_distance, names)
     # plot_surface(model_distance, names, 'cubic')
-    plot_histogram_3d(model_distance, names)
+    # plot_histogram_3d(model_distance, names)
+    # plot_histogram_2d(model_distance, names)
+    # plot_histogram_2d_onplanes(model_distance, names)
+    plot_histogram_2d_group(model_distance,names)
     # print(models.models)
