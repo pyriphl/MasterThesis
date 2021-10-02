@@ -38,9 +38,9 @@ def interpolation(table, model):
 
 
 def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name):
-    ticker_positions = []
-    for i in range(len(ticker_labels)):
-        ticker_positions.append(i)
+    ticker_positions = np.arange(len(ticker_labels))
+    # for i in range(len(ticker_labels)):
+    # ticker_positions.append(i)
 
     axis.set_xlabel(x_label)
     axis.set_ylabel(y_label)
@@ -169,6 +169,7 @@ def plot_histogram_2d_onplanes(t1, labels):
 
     plt.show()
 
+
 def plot_histogram_2d_group(t1, labels):
     n_groups = len(labels)
     # create plot
@@ -178,8 +179,8 @@ def plot_histogram_2d_group(t1, labels):
     opacity = 0.8
 
     for i in range(0, n_groups):
-        rect = plt.bar(index+i*bar_width, t1[i], bar_width,
-                     alpha=opacity, label = labels[i])
+        rect = plt.bar(index + i * bar_width, t1[i], bar_width,
+                       alpha=opacity, label=labels[i])
 
     # rect1 = plt.bar(index+1*bar_width, t1[1], bar_width,
     #                  alpha=opacity, label = labels[1])
@@ -194,4 +195,20 @@ def plot_histogram_2d_group(t1, labels):
     plt.legend()
 
     plt.tight_layout()
+    plt.show()
+
+
+def plot_histogram_2d_compare(t1, t2, labels):
+    view_labels = build_pair_label(labels)
+    pos = np.arange(len(view_labels))  # the label locations
+    entry1 = build_dist_list(t1)
+    entry2 = build_dist_list(t2)
+    bar_width = 0.35
+    plt.barh(pos, entry1, bar_width, alpha=0.5, label='model distance')
+    plt.barh(pos + bar_width, entry2, bar_width, alpha=0.5, label='tree distance')
+    plt.yticks(pos, view_labels)
+    plt.xlabel('distance')
+    plt.ylabel('paired seq names')
+    plt.title('2d histogram comparing tree and model distance')
+
     plt.show()

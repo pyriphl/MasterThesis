@@ -5,7 +5,7 @@ from Bio import Phylo
 import tests
 from src.fileIO import delete_folder, load_tree, load_aln, SIMPHY_PATH, ALN_PATH
 from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d, plot_histogram_2d, \
-    plot_histogram_2d_onplanes, plot_histogram_2d_group
+    plot_histogram_2d_onplanes, plot_histogram_2d_group, plot_histogram_2d_compare
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
 from src.seq_operations import get_by_name, calculate_distance_aligned_seq, prep_input_seq, dist_window_average
 from src.tree_operation import lookup_by_names, pairwaise_terminal_dist
@@ -19,6 +19,7 @@ def calculate_distances():
     # names, model_distance = calculate_distance_aligned_seq(input_seqs, 'JC69')
     tree_distance = pairwaise_terminal_dist(names, tree)
     return model_distance, tree_distance, names
+
 
 if __name__ == '__main__':
     # tests.test_load_tree()
@@ -40,5 +41,7 @@ if __name__ == '__main__':
     # plot_histogram_3d(model_distance, names)
     # plot_histogram_2d(model_distance, names)
     # plot_histogram_2d_onplanes(model_distance, names)
-    plot_histogram_2d_group(model_distance,names)
+    # plot_histogram_2d_group(model_distance,names)
+    plot_histogram_2d_compare(model_distance, tree_distance, names)
+
     # print(models.models)
