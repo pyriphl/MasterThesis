@@ -51,12 +51,22 @@ def prep_input_seq(seqs, tree, s_position, e_position):
 
 def dist_window_average(seqs, tree, model: str, window_size: int):
     dists = []
+    names = []
     if window_size > len(seqs[0]):
+        print('length out of boundary')
         return
-    for index in range(0, len(seqs[0]) - window_size):
-        start = index
-        end = index + len(seqs[0])
-        input_seqs = prep_input_seq(seqs, tree, start, end)
+    if window_size == 0:
+        print('window size 0')
+        return
+    if window_size == len(seqs[0]):
+        input_seqs = prep_input_seq(seqs, tree, 0, len(seqs[0]))
         names, dist = calculate_distance_aligned_seq(input_seqs, model)
         dists.append(dist.to_array())
+    else:
+        for index in range(0, len(seqs[0]) - window_size):
+            start = index
+            end = index + len(seqs[0]) - 1
+            input_seqs = prep_input_seq(seqs, tree, start, end)
+            names, dist = calculate_distance_aligned_seq(input_seqs, model)
+            dists.append(dist.to_array())
     return names, numpy.mean(dists, axis=0)

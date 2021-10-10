@@ -11,10 +11,8 @@ from src.seq_operations import get_by_name, calculate_distance_aligned_seq, prep
 from src.tree_operation import lookup_by_names, pairwaise_terminal_dist
 
 
-def calculate_distances():
-    tree = load_tree(SIMPHY_PATH + 'g_trees1.trees', 'newick')
-    seqs = load_aln(SIMPHY_PATH + 'data_1_TRUE.phy', 'phylip')
-    names, model_distance = dist_window_average(seqs, tree, 'JC69', 944)
+def calculate_distances(tree,seqs):
+    names, model_distance = dist_window_average(seqs, tree, 'JC69', len(seqs[0]))
     # input_seqs = prep_input_seq(seqs, tree, start, end)
     # names, model_distance = calculate_distance_aligned_seq(input_seqs, 'JC69')
     tree_distance = pairwaise_terminal_dist(names, tree)
@@ -28,20 +26,21 @@ if __name__ == '__main__':
     # tests.test_MSA_and_distance_models()
     # tests.test_tree_distance()
 
-    # align_mult_seq(SIMPHY_PATH + 'data_1.fasta', ALN_PATH + 'data_1.fasta')
-    # tree_generation_simphy(5, 10, 0.25, "data/Simphy/test/")
+    tree_generation_simphy(5, 1.5, 0.1, "data/Simphy/test/")
+    # tree = load_tree('data/Simphy/test/1/' + 'g_trees01.trees', 'newick')
+    # Phylo.draw(tree)
     # delete_folder("data/Simphy/test")
     # sequence_generation_indelible("data/Simphy/HGT/", "SimPhy_1.0.2/configuration_files/INDELible_simple.txt")
 
-    model_distance, tree_distance, names = calculate_distances()
-    show_table(model_distance, names, 'JC69')
-    show_table(tree_distance, names, 'Tree')
-    # plot_points_scatter(model_distance, tree_distance, names)
-    # plot_surface(model_distance, names, 'cubic')
-    # plot_histogram_3d(model_distance, names)
-    # plot_histogram_2d(model_distance, names)
-    # plot_histogram_2d_onplanes(model_distance, names)
-    # plot_histogram_2d_group(model_distance,names)
-    plot_histogram_2d_compare(model_distance, tree_distance, names)
+
+    # s_tree = load_tree(SIMPHY_PATH + 's_tree.trees', 'newick')
+    # g_tree = load_tree(SIMPHY_PATH + 'g_trees10.trees', 'newick')
+    # seqs = load_aln(SIMPHY_PATH + 'data_10_TRUE.phy', 'phylip')
+    # Phylo.draw(s_tree)
+    # model_distance, tree_distance, names = calculate_distances(g_tree, seqs)
+    # show_table(model_distance, names, 'JC69')
+    # show_table(tree_distance, names, 'Tree')
+    # Phylo.draw(g_tree)
+    # plot_histogram_2d_compare(model_distance, tree_distance, names, 'data_01')
 
     # print(models.models)

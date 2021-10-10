@@ -7,6 +7,7 @@ from Bio import AlignIO
 
 ALN_PATH = 'data/AlignedSequences/'
 SIMPHY_PATH = 'data/Simphy/HGT/1/'
+PICTURE_PATH = 'data/Simphy/HGT/pictures/'
 
 
 # type: fasta

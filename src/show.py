@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
+from Bio import Phylo
 from matplotlib import style
 from matplotlib import ticker
 from scipy.interpolate import griddata
 from tabulate import tabulate
 import numpy as np
+
+from src.fileIO import PICTURE_PATH
 
 
 def show_table(Array, labels, name):
@@ -169,7 +172,8 @@ def plot_histogram_2d_onplanes(t1, labels):
 
     plt.show()
 
-
+def show_tree(tree):
+    Phylo.draw(tree)
 def plot_histogram_2d_group(t1, labels):
     n_groups = len(labels)
     # create plot
@@ -198,17 +202,20 @@ def plot_histogram_2d_group(t1, labels):
     plt.show()
 
 
-def plot_histogram_2d_compare(t1, t2, labels):
+def plot_histogram_2d_compare(t1, t2, labels, title:str):
     view_labels = build_pair_label(labels)
     pos = np.arange(len(view_labels))  # the label locations
     entry1 = build_dist_list(t1)
     entry2 = build_dist_list(t2)
     bar_width = 0.35
+
+    plt.figure(figsize=(11, 6))
     plt.barh(pos, entry1, bar_width, alpha=0.5, label='model distance')
     plt.barh(pos + bar_width, entry2, bar_width, alpha=0.5, label='tree distance')
     plt.yticks(pos, view_labels)
     plt.xlabel('distance')
     plt.ylabel('paired seq names')
-    plt.title('2d histogram comparing tree and model distance')
-
+    plt.title(title)
+    plt.legend()
+    plt.savefig(PICTURE_PATH + title)
     plt.show()

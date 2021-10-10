@@ -1,0 +1,1 @@
+./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:5e-09 -sd f:4.9e-09 -gt f:4.9e-10 -lt sl:0.0,1.0,gt -lk 0 -SP f:5 -rl f:10 -o data/Simphy/test/ -sl f:5 -st f:1.5 -su f:0.1 

@@ -21,15 +21,13 @@ import subprocess
 
 
 def tree_generation_simphy(num_taxa: int, height: float, sub_rate: float, output_path: str):
-    command: str = './SimPhy_1.0.2/bin/simphy_lnx64 -sb f:5e-09 -sd f:4.9e-09 -gt f:4.9e-10 -lt sl:0.0,1.0,gt -lk 0 ' \
-                   '-SP f:10 -rl f:100' + ' -o ' + output_path + ' -sl f:' + str(num_taxa) + ' -st f:' + str(
-        height) + ' -su f:' + str(sub_rate)
-    # os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -rs 1 -rg 1 -lt f:0.0000005 -o ../SimPhy_test')
+    # command: str = './SimPhy_1.0.2/bin/simphy_lnx64 -sb f:5e-09 -sd f:4.9e-09 -gt f:4.9e-10 -lt sl:0.0,1.0,gt -lk 0 ' \
+    #                '-SP f:5 -rl f:10 ' + ' -o ' + output_path + ' -sl f:' + str(num_taxa) + ' -st f:' + str(
+    #     height) + ' -su f:' + str(sub_rate)
+    os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:0.000001 -ld f:0.0000005 -lb f:0.0000005 -lt f:0.0000005 -rs 1 -rg 1 -o SimPhy_test -sp f:10000 -su f:0.00001 -sg f:1 -sl U:5,10 -st f:1000000 -om 1 -v 2 -od 1 -op 1 -oc 1 -on 1 -cs 22 ')
     # subprocess.check_output(command, shell=True)
-    os.system(command)
-    print(command)
-
-
+    # os.system(command)
+    # print(command)
 # input_path: path of input tree
 # config: path of config file
 # output: same as input path
