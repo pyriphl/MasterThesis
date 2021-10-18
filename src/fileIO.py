@@ -6,7 +6,7 @@ from Bio import Phylo
 from Bio import AlignIO
 
 ALN_PATH = 'data/AlignedSequences/'
-SIMPHY_PATH = 'data/Simphy/HGT/1/'
+SIMPHY_PATH = 'data/Simphy/HGT/'
 PICTURE_PATH = 'data/Simphy/HGT/pictures/'
 
 
