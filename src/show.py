@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 from Bio import Phylo
 from matplotlib import style
 from matplotlib import ticker
-from scipy.interpolate import griddata
+from scipy.interpolate import griddata, interp1d
 from tabulate import tabulate
 import numpy as np
 
 from src.fileIO import PICTURE_PATH
+from src.seq_operations import WINDOW_SIZE
 
 
 def show_table(Array, labels, name):
@@ -33,11 +34,18 @@ def get_points_values(table):
 
 
 # model type : 'nearest', 'linear', 'cubic'
-def interpolation(table, model):
+def interpolation_3d(table, model):
     grid_x, grid_y = np.mgrid[0:5:300j, 0:5:300j]
     points, values = get_points_values(table)
     grid_z = griddata(points, values, (grid_x, grid_y), method=model)
     return grid_x, grid_y, grid_z
+
+
+def interpolation_2d(xdata, ydata, model):
+    x = xdata
+    y = ydata
+    f = interp1d(x, y, kind=model)
+    return f
 
 
 def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name):
@@ -58,7 +66,7 @@ def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name)
 
 
 def plot_surface(data, labels, type: str):
-    t1_X, t1_Y, t1_Z = interpolation(data, type)
+    t1_X, t1_Y, t1_Z = interpolation_3d(data, type)
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
@@ -172,8 +180,12 @@ def plot_histogram_2d_onplanes(t1, labels):
 
     plt.show()
 
-def show_tree(tree):
-    Phylo.draw(tree)
+
+def show_tree(tree, out_path):
+    Phylo.draw(tree, do_show=False)
+    plt.savefig(out_path)
+
+
 def plot_histogram_2d_group(t1, labels):
     n_groups = len(labels)
     # create plot
@@ -202,7 +214,7 @@ def plot_histogram_2d_group(t1, labels):
     plt.show()
 
 
-def plot_histogram_2d_compare(t1, t2, labels, title:str):
+def plot_histogram_2d_compare(t1, t2, labels, title: str):
     view_labels = build_pair_label(labels)
     pos = np.arange(len(view_labels))  # the label locations
     entry1 = build_dist_list(t1)
@@ -218,4 +230,43 @@ def plot_histogram_2d_compare(t1, t2, labels, title:str):
     plt.title(title)
     plt.legend()
     plt.savefig(PICTURE_PATH + title)
+    plt.show()
+
+
+def plot_sliding_window(ts, end, step, names):
+    x_data = np.arange(0, end, step).tolist()
+    n = len(ts[0])  # number of taxa
+    titles = build_pair_label(names)
+    count = 0
+
+    # labels on the axis
+    pos = np.arange(0, end, 50).tolist()  # change according to window size
+    labels = []
+    for p in pos:
+        label = str(p) + '-' + str(p + WINDOW_SIZE)
+        labels.append(label)
+
+    # draw
+    for i in range(0, n):
+        for j in range(i + 1, n):
+            fig, ax = plt.subplots(figsize=(8, 8))
+            y_data = []
+            for t in ts:
+                y_data.append(t[j][i])
+            f = interpolation_2d(x_data, y_data, 'cubic')
+            ax.plot(x_data, f(x_data), '-')
+            ax.set_title(titles[count])
+            # axis setup
+            plt.xticks(pos, labels)
+            ax.set_xlabel('nucleotide position')
+            ax.set_ylabel('model distance')
+            for tick in ax.get_xticklabels():
+                tick.set_rotation(55)
+            # save fig
+            plt.savefig(PICTURE_PATH + 'sliding_window/' + titles[count])  # save fig
+            count = count + 1
+
+
+
+
     plt.show()
