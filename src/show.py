@@ -233,7 +233,7 @@ def plot_histogram_2d_compare(t1, t2, labels, title: str):
     plt.show()
 
 
-def plot_sliding_window(ts, end, step, names):
+def plot_sliding_window(ts, end, step, names, output):
     x_data = np.arange(0, end, step).tolist()
     n = len(ts[0])  # number of taxa
     titles = build_pair_label(names)
@@ -263,7 +263,7 @@ def plot_sliding_window(ts, end, step, names):
             for tick in ax.get_xticklabels():
                 tick.set_rotation(55)
             # save fig
-            plt.savefig(PICTURE_PATH + 'sliding_window/' + titles[count])  # save fig
+            plt.savefig(output + titles[count])  # save fig
             count = count + 1
 
 

@@ -1,1 +1,0 @@
-./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:0.000001 -lb f:0.000002 -lt f:0.000005 -rs 10 -rl f:10 -sp f:10000 -su f:0.00001 -sg f:1 -sl f:4 -st f:100000 -v 2 -od 1 -op 1 -oc 1 -on 1 -o data/Simphy/test/ 

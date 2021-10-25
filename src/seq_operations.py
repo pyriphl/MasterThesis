@@ -6,7 +6,7 @@ from cogent3.evolve import distance
 from Bio import Align
 
 
-WINDOW_SIZE = 500
+WINDOW_SIZE = 300
 SLIDING_STEP = 1
 # Models:
 # 'JC69', 'K80', 'F81', 'HKY85', 'TN93', 'GTR', 'ssGN', 'GN', 'BH', 'DT', 'CNFGTR', 'CNFHKY', 'MG94HKY', 'MG94GTR',
