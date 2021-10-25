@@ -1,0 +1,13 @@
+[TYPE] NUCLEOTIDE 1	
+			
+
+[SETTINGS]
+	[fastaextension]	fasta  
+
+[MODEL] simple_common	
+	[submodel]	JC
+
+
+
+
+[EVOLVE] 
