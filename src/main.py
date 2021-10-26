@@ -4,7 +4,8 @@ from cogent3.evolve import models
 from Bio import Phylo
 
 import tests
-from src.fileIO import delete_folder, load_tree, load_aln, SIMPHY_PATH, ALN_PATH, PICTURE_PATH
+from src.fileIO import delete_folder, load_tree, load_aln, write_data, load_distance, load_tags
+from src.path import ALN_PATH, SIMPHY_PATH, PICTURE_PATH, TXT_PATH
 from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d, plot_histogram_2d, \
     plot_histogram_2d_onplanes, plot_histogram_2d_group, plot_histogram_2d_compare, plot_sliding_window
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
@@ -41,14 +42,17 @@ if __name__ == '__main__':
         num = f'{i:02d}'
         g_tree = load_tree(SIMPHY_PATH + '2/g_trees'+num+'v2.trees', 'newick')
         seqs = load_aln(SIMPHY_PATH + '2/data_'+num+'v2_TRUE.phy', 'phylip')
-        print(len(seqs[0]))
-        model_distance, tree_distance, names, model_distance_list = calculate_distances(g_tree, seqs)
-        show_table(model_distance, names, 'JC69')
-        show_table(tree_distance, names, 'Tree')
+        # print(len(seqs[0]))
+        # model_distance, tree_distance, names, model_distance_list = calculate_distances(g_tree, seqs)
+        # show_table(model_distance, names, 'JC69')
+        # show_table(tree_distance, names, 'Tree')
+        # write_data(model_distance,tree_distance,names,TXT_PATH)
+        # load_distance(TXT_PATH+'tree_dist.txt')
+        load_tags(TXT_PATH+'tags.txt')
         # Phylo.draw(g_tree,do_show=False)
         # plt.savefig(PICTURE_PATH +'2/g_tree'+num+'.png')
         # plot_histogram_2d_compare(model_distance, tree_distance, names, '2/data_'+num)
-        plot_sliding_window(model_distance_list,(len(seqs[0])-WINDOW_SIZE),SLIDING_STEP,names,PICTURE_PATH + '2/sliding_window/')
+        # plot_sliding_window(model_distance_list,(len(seqs[0])-WINDOW_SIZE),SLIDING_STEP,names,PICTURE_PATH + '2/sliding_window/')
 
 
     # print(models.models)

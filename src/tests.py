@@ -1,6 +1,7 @@
 from Bio import Phylo
 
-from src.fileIO import read_from, SIMPHY_PATH, load_tree, ALN_PATH, load_aln
+from src.fileIO import load_from, load_tree, load_aln
+from src.path import ALN_PATH, SIMPHY_PATH
 from src.sample_generation import tree_generation_simphy, sequence_generation_indelible
 from src.seq_operations import calculate_distance_aligned_seq, get_by_name
 from src.tree_operation import lookup_by_names
@@ -33,7 +34,7 @@ def test_tree_distance():
 
 # test load sequences from fasta file
 def test_load_sequence():
-    records = read_from(SIMPHY_PATH + 'data_1.fasta', 'fasta')
+    records = load_from(SIMPHY_PATH + 'data_1.fasta', 'fasta')
     print(records)
 
 

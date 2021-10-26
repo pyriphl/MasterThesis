@@ -6,7 +6,7 @@ from scipy.interpolate import griddata, interp1d
 from tabulate import tabulate
 import numpy as np
 
-from src.fileIO import PICTURE_PATH
+from src.path import PICTURE_PATH
 from src.seq_operations import WINDOW_SIZE
 
 
