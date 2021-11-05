@@ -6,7 +6,7 @@ from cogent3.evolve import distance
 from Bio import Align
 
 
-WINDOW_SIZE = 200
+WINDOW_SIZE = 300
 SLIDING_STEP = 1
 # Models:
 # 'JC69', 'K80', 'F81', 'HKY85', 'TN93', 'GTR', 'ssGN', 'GN', 'BH', 'DT', 'CNFGTR', 'CNFHKY', 'MG94HKY', 'MG94GTR',
@@ -67,11 +67,8 @@ def dist_window_average(seqs, tree, model: str, window_size: int):
     else:
         for index in range(0, len(seqs[0]) - window_size):
             start = index
-            end = index + len(seqs[0]) - 1
+            end = index + window_size
             input_seqs = prep_input_seq(seqs, tree, start, end)
-            if len(dists) > 750:
-                print(len(dists))
-
             names, dist = calculate_distance_aligned_seq(input_seqs, model)
             dists.append(dist.to_array())
     return names, numpy.mean(dists, axis=0), dists
