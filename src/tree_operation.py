@@ -29,10 +29,23 @@ def terminal_neighbor_dists(self):
     return [self.distance(*i) for i in generate_pairs(self.find_clades(terminal=True))]
 
 
-def pairwaise_terminal_dist(names, tree):
+def pairwise_terminal_dist(names, tree):
     tree_distance = numpy.zeros((len(names), len(names)))
     name_tree = lookup_by_names(tree)
     for i in range(0, len(names)):
         for j in range(0, len(names)):
             tree_distance[i][j] = tree.distance(name_tree.get(names[i]), name_tree.get(names[j]))
     return tree_distance
+
+
+def pairwise_node_dist(names, tree):
+    dists = numpy.zeros((len(names), len(names)))
+    name_tree = lookup_by_names(tree)
+    for i in range(0, len(names)):
+        for j in range(0, len(names)):
+            trace = tree.trace(names[i],names[j])
+            # print(names[i] + ', ' + names[j])
+            # print(trace)
+            dist = len(trace)
+            dists[i][j] = dist - 2 if dist > 1 else 0
+    return dists

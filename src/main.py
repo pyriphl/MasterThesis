@@ -12,14 +12,14 @@ from src.show import plot_points_scatter, show_table, plot_surface, plot_histogr
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
 from src.seq_operations import get_by_name, calculate_distance_aligned_seq, dist_window_average, \
     WINDOW_SIZE, SLIDING_STEP
-from src.tree_operation import lookup_by_names, pairwaise_terminal_dist
+from src.tree_operation import lookup_by_names, pairwise_terminal_dist, pairwise_node_dist
 
 
 def calculate_distances(tree, seqs):
     names, avg_model_distance, model_distances = dist_window_average(seqs, tree, 'JC69', WINDOW_SIZE)
     # input_seqs = prep_input_seq(seqs, tree, start, end)
     # names, model_distance = calculate_distance_aligned_seq(input_seqs, 'JC69')
-    tree_distance = pairwaise_terminal_dist(names, tree)
+    tree_distance = pairwise_terminal_dist(names, tree)
     return avg_model_distance, tree_distance, names, model_distances
 
 
@@ -43,18 +43,19 @@ if __name__ == '__main__':
         num = f'{i:02d}'
         g_tree = load_tree(SIMPHY_PATH + '2/g_trees'+num+'v2.trees', 'newick')
         seqs = load_aln(SIMPHY_PATH + '2/data_'+num+'v2_TRUE.phy', 'phylip')
-        # names, model_distance, model_distance_list = sliding_window_dist(seqs,g_tree,WINDOW_SIZE)
-        # print(len(seqs[0]))
-        model_distance, tree_distance, names, model_distance_list = calculate_distances(g_tree, seqs)
-        show_table(model_distance, names, 'JC69')
-        show_table(tree_distance, names, 'Tree')
-        write_data(model_distance,tree_distance,names,TXT_PATH)
+        names, model_distance, model_distance_list = sliding_window_dist(seqs,g_tree,WINDOW_SIZE)
+        root_distance = pairwise_node_dist(names, g_tree)
+        show_table(root_distance, names, 'Tree')
+        # model_distance, tree_distance, names, model_distance_list = calculate_distances(g_tree, seqs)
+        # show_table(model_distance, names, 'JC69')
+        # show_table(tree_distance, names, 'Tree')
+        # write_data(model_distance,tree_distance,names,TXT_PATH)
         # load_distance(TXT_PATH+'tree_dist.txt')
         # load_tags(TXT_PATH+'tags.txt')
-        # Phylo.draw(g_tree,do_show=False)
+        # Phylo.draw(g_tree)
         # plt.savefig(PICTURE_PATH +'2/g_tree'+num+'.png')
-        plot_histogram_2d_compare(model_distance, tree_distance, names, '2/data_'+num)
-        plot_sliding_window(model_distance_list,(len(seqs[0])-WINDOW_SIZE),SLIDING_STEP,names,PICTURE_PATH + '2/sliding_window/')
+        # plot_histogram_2d_compare(model_distance, tree_distance, names, '2/data_'+num)
+        # plot_sliding_window(model_distance_list,(len(seqs[0])-WINDOW_SIZE),SLIDING_STEP,names,PICTURE_PATH + '2/sliding_window/')
 
 
     # print(models.models)
