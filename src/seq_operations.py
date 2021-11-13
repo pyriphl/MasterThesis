@@ -50,7 +50,6 @@ def prep_input_seq(seqs, tree, s_position, e_position):
         input_seqs[t.name] = seq[s_position:e_position]
     return input_seqs
 
-
 def dist_window_average(seqs, tree, model: str, window_size: int):
     dists = []
     names = []

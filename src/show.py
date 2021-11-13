@@ -1,11 +1,10 @@
 import matplotlib.pyplot as plt
 from Bio import Phylo
-from matplotlib import style
 from matplotlib import ticker
-from scipy.interpolate import griddata, interp1d
 from tabulate import tabulate
 import numpy as np
 
+from src.data import interpolation_3d, interpolation_2d
 from src.path import PICTURE_PATH
 from src.seq_operations import WINDOW_SIZE
 
@@ -31,21 +30,6 @@ def get_points_values(table):
             points.append((i, j))
             values.append(table[i][j])
     return points, values
-
-
-# model type : 'nearest', 'linear', 'cubic'
-def interpolation_3d(table, model):
-    grid_x, grid_y = np.mgrid[0:5:300j, 0:5:300j]
-    points, values = get_points_values(table)
-    grid_z = griddata(points, values, (grid_x, grid_y), method=model)
-    return grid_x, grid_y, grid_z
-
-
-def interpolation_2d(xdata, ydata, model):
-    x = xdata
-    y = ydata
-    f = interp1d(x, y, kind=model)
-    return f
 
 
 def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name):
@@ -265,8 +249,5 @@ def plot_sliding_window(ts, end, step, names, output):
             # save fig
             plt.savefig(output + titles[count])  # save fig
             count = count + 1
-
-
-
 
     plt.show()

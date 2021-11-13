@@ -26,11 +26,23 @@ def load_tree(path: str, input_type: str):
     return g_tree
 
 
-# MUSCLE default output is fasta
+# input phylip
 # return: Biopython alinment
 def load_aln(path: str, input_type: str):
     aln = AlignIO.read(path, input_type)
     return aln
+
+
+# input true aln phylip
+# num must be bigger than 1
+# return: Biopython alinment
+def load_partitions_as_aln(path: str, num, input_type: str):
+    result = AlignIO.read(path + 'data_1_TRUE.phy', input_type)
+    for i in range(2, num + 1):
+        data_path = path + 'data_' + i + '_TRUE.phy'
+        aln = AlignIO.read(data_path, input_type)
+        result = result + aln
+    return result
 
 
 def write_fasta(aln, path):
@@ -70,9 +82,18 @@ def load_tags(in_path):
         names = f.readlines()
     results = []
     for n in names:
-        results.append( n.replace('\n',''))
+        results.append(n.replace('\n', ''))
     print(results)
     return results
+
+
+def create_dir(path):
+    try:
+        os.mkdir(path)
+    except OSError:
+        print("Creation of the directory %s failed" % path)
+    else:
+        print("Successfully created the directory %s " % path)
 # test
 # read_from_phy("../data/AlignedSequences/dna.phy")
 # convert_phy_fasta("../data/AlignedSequences/dna.phy", "./data/dna.fasta")

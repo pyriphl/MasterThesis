@@ -5,7 +5,7 @@ from Bio import Phylo
 
 import tests
 from src.distance_calculation import sliding_window_dist
-from src.fileIO import delete_folder, load_tree, load_aln, write_data, load_distance, load_tags
+from src.fileIO import delete_folder, load_tree, load_aln, write_data, load_distance, load_tags, create_dir
 from src.path import ALN_PATH, SIMPHY_PATH, PICTURE_PATH, TXT_PATH
 from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d, plot_histogram_2d, \
     plot_histogram_2d_onplanes, plot_histogram_2d_group, plot_histogram_2d_compare, plot_sliding_window
@@ -34,18 +34,19 @@ if __name__ == '__main__':
     # tree = load_tree('data/Simphy/test/01/' + 'g_trees10.trees', 'newick')
     # Phylo.draw(tree)
     # delete_folder("data/Simphy/test")
-    # sequence_generation_indelible("data/Simphy/HGT/", "SimPhy_1.0.2/configuration_files/INDELible_simple.txt")
+    # sequence_generation_indelible("data/Simphy/test/", "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
 
-    # s_tree = load_tree(SIMPHY_PATH + '2/s_tree.trees', 'newick')
-    # Phylo.draw(s_tree,do_show=False)
-    # plt.savefig(PICTURE_PATH + '2/s_tree.png')
-    for i in range(10,11):
-        num = f'{i:02d}'
-        g_tree = load_tree(SIMPHY_PATH + '2/g_trees'+num+'v2.trees', 'newick')
-        seqs = load_aln(SIMPHY_PATH + '2/data_'+num+'v2_TRUE.phy', 'phylip')
-        names, model_distance, model_distance_list = sliding_window_dist(seqs,g_tree,WINDOW_SIZE)
-        root_distance = pairwise_node_dist(names, g_tree)
-        show_table(root_distance, names, 'Tree')
+    s_tree = load_tree(SIMPHY_PATH + '01/s_tree.trees', 'newick')
+    create_dir(PICTURE_PATH+'01/')
+    Phylo.draw(s_tree,do_show=False)
+    plt.savefig(PICTURE_PATH + '01/s_tree.png')
+    # for i in range(10,11):
+    #     num = f'{i:02d}'
+    #     g_tree = load_tree(SIMPHY_PATH + '2/g_trees'+num+'v2.trees', 'newick')
+    #     seqs = load_aln(SIMPHY_PATH + '2/data_'+num+'v2_TRUE.phy', 'phylip')
+    #     names, model_distance, model_distance_list = sliding_window_dist(seqs,g_tree,WINDOW_SIZE)
+    #     root_distance = pairwise_node_dist(names, g_tree)
+    #     show_table(root_distance, names, 'Tree')
         # model_distance, tree_distance, names, model_distance_list = calculate_distances(g_tree, seqs)
         # show_table(model_distance, names, 'JC69')
         # show_table(tree_distance, names, 'Tree')
