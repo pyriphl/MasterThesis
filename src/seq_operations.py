@@ -1,13 +1,15 @@
 import subprocess
+from multiprocessing import Pool
 
 import numpy
 from cogent3 import load_aligned_seqs, get_model, make_aligned_seqs
 from cogent3.evolve import distance
 from Bio import Align
 
-
-WINDOW_SIZE = 300
+WINDOW_SIZE = 500
 SLIDING_STEP = 1
+
+
 # Models:
 # 'JC69', 'K80', 'F81', 'HKY85', 'TN93', 'GTR', 'ssGN', 'GN', 'BH', 'DT', 'CNFGTR', 'CNFHKY', 'MG94HKY', 'MG94GTR',
 # 'GY94', 'Y98', 'H04G', 'H04GK', 'H04GGK', 'GNC', 'DSO78', 'AH96', 'AH96_mtmammals', 'JTT92', 'WG01'
@@ -16,8 +18,8 @@ def calculate_distance_aligned_seq(input_seqs, model: str):
     d = distance.EstimateDistances(aln, submodel=get_model(model))
     d.run(show_progress=False)
     dists = d.get_pairwise_distances()
-    names = dists.names
-    return names, dists
+    # names = dists.names
+    return dists
 
 
 def align_pair_seq(seq1, seq2):
@@ -50,6 +52,7 @@ def prep_input_seq(seqs, tree, s_position, e_position):
         input_seqs[t.name] = seq[s_position:e_position]
     return input_seqs
 
+
 def dist_window_average(seqs, tree, model: str, window_size: int):
     dists = []
     names = []
@@ -64,10 +67,24 @@ def dist_window_average(seqs, tree, model: str, window_size: int):
         names, dist = calculate_distance_aligned_seq(input_seqs, model)
         dists.append(dist.to_array())
     else:
-        for index in range(0, len(seqs[0]) - window_size):
-            start = index
-            end = index + window_size
-            input_seqs = prep_input_seq(seqs, tree, start, end)
-            names, dist = calculate_distance_aligned_seq(input_seqs, model)
-            dists.append(dist.to_array())
-    return names, numpy.mean(dists, axis=0), dists
+        with Pool(processes=4) as pool:
+            function_inputs = []
+            for index in range(0, len(seqs[0]) - window_size):
+                start = index
+                end = index + window_size
+                input_seqs = prep_input_seq(seqs, tree, start, end)
+                function_inputs.append((input_seqs, model))
+            dists = pool.starmap(calculate_distance_aligned_seq, function_inputs)
+            array = [d.to_array() for d in dists]
+            names = dists[0].names
+            return names, numpy.mean(array, axis=0), array
+            # for index in range(0, len(seqs[0]) - window_size):
+            #     print(len(seqs[0].seq))
+            #     print(len(seqs[0])-window_size)
+            #     print(index)
+            #     start = index
+            #     end = index + window_size
+            #     input_seqs = prep_input_seq(seqs, tree, start, end)
+            #     names, dist = calculate_distance_aligned_seq(input_seqs, model)
+            #     dists.append(dist.to_array())
+    # return names, numpy.mean(dists, axis=0), dists

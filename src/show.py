@@ -4,7 +4,7 @@ from matplotlib import ticker
 from tabulate import tabulate
 import numpy as np
 
-from src.data import interpolation_3d, interpolation_2d
+from src.data_processing import interpolation_3d, interpolation_2d
 from src.path import PICTURE_PATH
 from src.seq_operations import WINDOW_SIZE
 
@@ -20,16 +20,6 @@ def show_table(Array, labels, name):
         A.append(line)
     # A = np.vstack((names, tree))
     print(tabulate(A, labels))
-
-
-def get_points_values(table):
-    points = []
-    values = []
-    for i in range(0, len(table[0])):
-        for j in range(0, len(table[0])):
-            points.append((i, j))
-            values.append(table[i][j])
-    return points, values
 
 
 def set_axis_labels(axis, x_label, y_label, z_label, ticker_labels, figure_name):

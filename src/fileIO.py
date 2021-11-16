@@ -37,11 +37,15 @@ def load_aln(path: str, input_type: str):
 # num must be bigger than 1
 # return: Biopython alinment
 def load_partitions_as_aln(path: str, num, input_type: str):
+    s_tree = load_tree(path + 's_tree.trees', 'newick')
+    s_taxa = s_tree.get_terminals()
     result = AlignIO.read(path + 'data_1_TRUE.phy', input_type)
-    for i in range(2, num + 1):
-        data_path = path + 'data_' + i + '_TRUE.phy'
-        aln = AlignIO.read(data_path, input_type)
-        result = result + aln
+    aln1 = AlignIO.read(path + 'data_1_TRUE.phy', input_type)
+    aln2 = AlignIO.read(path + 'data_2_TRUE.phy', input_type)
+    for i in range(0, len(result)):
+        result[i].id = aln1[i].id
+        result[i].name = aln1[i].name
+        result[i].seq = aln1[i].seq + aln2[i].seq
     return result
 
 
