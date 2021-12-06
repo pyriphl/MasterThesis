@@ -75,9 +75,19 @@ def write_data(model_distance, tree_distance, tags, out_path):
             f.write('%s\n' % item)
 
 
+def write_distances(distances, out_path):
+    create_dir(out_path)
+    np.savez(out_path + 'window_distances.npz', *distances)
+
+
+def load_distances(in_path):
+    dict_dists = np.load(in_path + 'window_distances.npz')
+    data = [dict_dists[key] for key in dict_dists]
+    return data
+
+
 def load_distance(in_path):
     distance = np.loadtxt(in_path)
-    print(distance)
     return distance
 
 
@@ -87,7 +97,6 @@ def load_tags(in_path):
     results = []
     for n in names:
         results.append(n.replace('\n', ''))
-    print(results)
     return results
 
 

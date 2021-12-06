@@ -32,7 +32,7 @@ def tree_generation_simphy(num_taxa: int, height: float, sub_rate: float, output
     # subprocess.check_output(command, shell=True)
     # os.system(command)
     # print(command)
-    os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:0.1 -lt f:0.5 -rs 10 -rl f:2 -rg 1 -sp f:10 -su f:0.1 -sg f:1 -sl f:4 -st f:2 -v 2 -om 1 -od 1 -op 1 -oc 1 -on 1 '+' -o ' + output_path)
+    os.system('./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:0.1 -lt f:0.2 -rs 1 -rl f:2 -rg 1 -sp f:10 -su f:0.1 -sg f:1 -sl f:5 -st f:2 -v 2 -om 1 -od 1 -op 1 -oc 1 -on 1 '+' -o ' + output_path)
 
 
 # input_path: path of input tree

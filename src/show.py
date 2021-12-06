@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
+import numpy
 from Bio import Phylo
-from matplotlib import ticker
+from matplotlib import ticker, pyplot as plt
+from matplotlib.widgets import Slider
 from tabulate import tabulate
 import numpy as np
 
-from src.data_processing import interpolation_3d, interpolation_2d
+from src.data_processing import interpolation_3d, interpolation_2d, reduce_to_list, linear_regression, build_pair_label, \
+    build_dist_list
 from src.path import PICTURE_PATH
 from src.seq_operations import WINDOW_SIZE
 
@@ -101,29 +104,6 @@ def plot_histogram_3d(t1, labels):
 
     set_axis_labels(ax, 'seq names', 'seq names', 'distance', labels, '3d histogram')
     plt.show()
-
-
-def build_pair_label(labels):
-    # number of taxa entries
-    result = []
-    n = len(labels)
-    # build new labels
-    for i in range(0, n):
-        for j in range(i + 1, n):
-            tag = '(' + labels[i] + ', ' + labels[j] + ')'
-            result.append(tag)
-    return result
-
-
-def build_dist_list(t):
-    result = []
-    # number of taxa entries
-    n = len(t[0])
-    # build new list
-    for i in range(0, n):
-        for j in range(i + 1, n):
-            result.append(t[i][j])
-    return result
 
 
 def plot_histogram_2d(t1, labels):
@@ -241,3 +221,53 @@ def plot_sliding_window(ts, end, step, names, output):
             count = count + 1
 
     plt.show()
+
+
+def plot_correlation_sw(xs, ys_list, min_x, max_x):
+    fig, ax = plt.subplots()
+    plt.title('correlation with sliding window')
+    plt.subplots_adjust(left=0.25, bottom=0.25)
+    x_data = reduce_to_list(xs)
+    y_data_list = [reduce_to_list(ys) for ys in ys_list]
+    x_test = np.arange(min_x, max_x, max_x / len(x_data))
+    p = plt.scatter(x_data, y_data_list[0], color='gray')
+
+    # x_data = np.arange(0,10,0.5)
+    # y_data = 2 * x_data
+    # x_test = x_data
+    y_pred, = linear_regression(x_data, y_data_list[0], x_test)
+    l, = plt.plot(x_test, y_pred, color='red', linewidth=2)
+    # l, = plt.plot(x_test, linear_regression(x_data, y_data, x_test), color='red', linewidth=2)
+
+    axslider = plt.axes([0.25, 0.1, 0.65, 0.03], facecolor='lightgoldenrodyellow')
+    sposition = Slider(axslider, 'Sliding window pos', 0.0, 499.0, valinit=0.0, valstep=1.0)
+
+    def update(val):
+        position = sposition.val
+        new_position = numpy.array((x_data, y_data_list[int(position)]))
+        p.set_offsets(new_position.transpose())
+        y_pred_new = linear_regression(x_data, y_data_list[int(position)])
+        l.set_ydata(y_pred_new, x_test)
+        fig.canvas.draw_idle()
+
+    sposition.on_changed(update)
+    ax.set_xlabel('species tree distance')
+    ax.set_ylabel('model distance')
+    plt.show()
+
+
+def show_compare_sw_results_linreg(xs, ys, y_pred, text, title, output):
+    fig, ax = plt.subplots()
+    # x_data = reduce_to_list(xs)
+    x_data = xs
+    y_data = ys
+    # y_data = reduce_to_list(ys)
+    p = plt.scatter(x_data, y_data, color='gray')
+    l, = plt.plot(x_data, y_pred, color='red', linewidth=2)
+    # ax.set_xlabel('species tree distance')
+    # ax.set_ylabel('model distance')
+    text = "squared error = " + str(text[0]) + "\nslope = " + str(text[1])
+    ax.text(0.5, 0.8, text, fontsize=8, transform=fig.transFigure)
+    plt.title(title)
+    plt.savefig(output)
+    # plt.show()
