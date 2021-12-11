@@ -1,7 +1,7 @@
 import numpy
 from sklearn import metrics
 
-from src.data_processing import split_model_distance_list, linear_regression
+from src.data_processing import split_model_distance_list, linear_regression, normalize_minmax_list
 
 from src.show import show_compare_sw_results_linreg
 
@@ -31,15 +31,20 @@ def compare_sw_results_correlation(ds, end, step, names):
 def compare_sw_results_linreg(ds, end, step, names, output):
     x_data, data_list, name_pairs = split_model_distance_list(ds, end, step, names)
     n = len(data_list)
-    result = []
+    errors = []
+    slopes = []
+    y_preds = []
     count = 0
     for y_test in data_list:
-        y_pred, slope = linear_regression(x_data, y_test, numpy.array(x_data))
-        error = metrics.mean_squared_error(y_test, y_pred)
+        norm_y_test = normalize_minmax_list(numpy.amin(y_test), numpy.amax(y_test), y_test)
+        y_pred, slope = linear_regression(x_data, norm_y_test, numpy.array(x_data))
+        error = metrics.mean_squared_error(norm_y_test, y_pred)
         # error = metrics.mean_absolute_error(y_test, y_pred)
         # error = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
-        result.append((error, slope))
-        show_compare_sw_results_linreg(x_data, y_test, y_pred, (error, slope), name_pairs[count],
+        y_preds.append(y_pred)
+        errors.append(error)
+        slopes.append(slope)
+        show_compare_sw_results_linreg(x_data, norm_y_test, y_pred, (error, slope), name_pairs[count],
                                        output + name_pairs[count])
         count = count + 1
-    return result, name_pairs
+    return y_preds, errors, slopes, name_pairs

@@ -271,3 +271,18 @@ def show_compare_sw_results_linreg(xs, ys, y_pred, text, title, output):
     plt.title(title)
     plt.savefig(output)
     # plt.show()
+
+
+def plot_boxplot(ts, names):
+    # prepare the data
+    n = len(names)  # number of taxa
+    data = [[] for i in range(n)]
+    for i in range(0, n):
+        for t in ts:
+            data[i] = numpy.concatenate((data[i], t[i]))
+
+    # plot
+    fig, ax = plt.subplots()
+    ax.boxplot(data, labels=names)
+    ax.set_title('Boxplot')
+    plt.show()

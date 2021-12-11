@@ -6,7 +6,7 @@ from cogent3 import load_aligned_seqs, get_model, make_aligned_seqs
 from cogent3.evolve import distance
 from Bio import Align
 
-WINDOW_SIZE = 500
+WINDOW_SIZE = 300
 SLIDING_STEP = 1
 
 

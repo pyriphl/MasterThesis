@@ -1,10 +1,10 @@
 import numpy
 import numpy as np
 from scipy.interpolate import griddata, interp1d
-from sklearn.linear_model import LinearRegression
-
+from sklearn.linear_model import LinearRegression, LogisticRegression
 
 # model type : 'nearest', 'linear', 'cubic'
+from sklearn.model_selection import train_test_split
 
 
 def interpolation_3d(table, model):
@@ -22,11 +22,18 @@ def interpolation_2d(xdata, ydata, model):
 
 
 # x_scaled = (x - min(x))/(max(x) - min(x))
-def normalize_minmax(min_x, max_x, xs):
+def normalize_minmax_array(min_x, max_x, xs):
     result = np.zeros(xs.shape)
     for i in range(0, len(xs[0])):
         for j in range(0, len(xs[0])):
             result[i][j] = (xs[i][j] - min_x) / (max_x - min_x)
+    return result
+
+
+def normalize_minmax_list(min_x, max_x, xs):
+    result = []
+    for x in xs:
+        result.append((x - min_x) / (max_x - min_x))
     return result
 
 
@@ -55,11 +62,11 @@ def correlation(xs, ys):
     return [n / d for n, d in zip(numerator, denominator)]
 
 
-def linear_regression(xs, ys, x_test):
+def linear_regression(x_train, y_train, x_test):
     # Reshape your data either using array.reshape(-1, 1) if your data has a single feature or
     # array.reshape(1, -1) if it contains a single sample.
-    x_data = np.array(xs)
-    y_data = np.array(ys)
+    x_data = np.array(x_train)
+    y_data = np.array(y_train)
     regressor = LinearRegression()
     regressor.fit(x_data.reshape(-1, 1), y_data.reshape(-1, 1))
     y_pred = regressor.predict(x_test.reshape(-1, 1))
@@ -115,3 +122,14 @@ def build_dist_list(t):
         for j in range(i + 1, n):
             result.append(t[i][j])
     return result
+
+
+def logistic_regression(X, y, xtest):
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+    X_train = X
+    y_train = y
+    # X_test = X
+    logreg = LogisticRegression()
+    logreg.fit(X_train, y_train)
+    y_pred = logreg.predict(xtest)
+    return y_pred, y
