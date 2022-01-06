@@ -1,12 +1,10 @@
-import subprocess
 from multiprocessing import Pool
 
 import numpy
-from cogent3 import load_aligned_seqs, get_model, make_aligned_seqs
+from cogent3 import get_model, make_aligned_seqs
 from cogent3.evolve import distance
 from Bio import Align
 
-WINDOW_SIZE = 300
 SLIDING_STEP = 1
 
 
@@ -44,35 +42,41 @@ def slice_seq(seq, start, end):
     return seq[start:end]
 
 
-def prep_input_seq(seqs, tree, s_position, e_position):
+# def prep_input_seq(seqs, tree, s_position, e_position):
+#     input_seqs = {}
+#     taxa = tree.get_terminals()
+#     for t in taxa:
+#         seq = get_by_name(seqs, t.name)
+#         input_seqs[t.name] = seq[s_position:e_position]
+#     return input_seqs
+def prep_input_seq(seqs, s_position, e_position):
     input_seqs = {}
-    taxa = tree.get_terminals()
-    for t in taxa:
-        seq = get_by_name(seqs, t.name)
-        input_seqs[t.name] = seq[s_position:e_position]
+    for name in seqs.keys():
+        seq = seqs[name]
+        input_seqs[name] = seq[s_position:e_position]
     return input_seqs
 
-
-def dist_window_average(seqs, tree, model: str, window_size: int):
+def dist_window_average(seqs, model: str, window_size: int):
     dists = []
     names = []
-    if window_size > len(seqs[0]):
+    seq_length = len(list(seqs.values())[0])
+    if window_size > seq_length:
         print('length out of boundary')
         return
     if window_size == 0:
         print('window size 0')
         return
-    if window_size == len(seqs[0]):
-        input_seqs = prep_input_seq(seqs, tree, 0, len(seqs[0]))
+    if window_size == seq_length:
+        input_seqs = prep_input_seq(seqs, 0, seq_length)
         names, dist = calculate_distance_aligned_seq(input_seqs, model)
         dists.append(dist.to_array())
     else:
         with Pool(processes=4) as pool:
             function_inputs = []
-            for index in range(0, len(seqs[0]) - window_size):
+            for index in range(0, seq_length - window_size):
                 start = index
                 end = index + window_size
-                input_seqs = prep_input_seq(seqs, tree, start, end)
+                input_seqs = prep_input_seq(seqs, start, end)
                 function_inputs.append((input_seqs, model))
             dists = pool.starmap(calculate_distance_aligned_seq, function_inputs)
             array = [d.to_array() for d in dists]

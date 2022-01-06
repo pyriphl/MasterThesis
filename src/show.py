@@ -8,8 +8,7 @@ import numpy as np
 
 from src.data_processing import interpolation_3d, interpolation_2d, reduce_to_list, linear_regression, build_pair_label, \
     build_dist_list
-from src.path import PICTURE_PATH
-from src.seq_operations import WINDOW_SIZE
+from src.path import PICTURE_PATH, WINDOW_SIZE
 
 
 def show_table(Array, labels, name):
