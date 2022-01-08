@@ -132,4 +132,33 @@ def logistic_regression(X, y, xtest):
     logreg = LogisticRegression()
     logreg.fit(X_train, y_train)
     y_pred = logreg.predict(xtest)
-    return y_pred, y
+    y_pred_proba = logreg.predict_proba(xtest)[::, 1]
+    return y_pred, y_pred_proba
+
+
+# split the training data uniformly
+def training_data_split(Xs, ys, num_sample):
+    counter = 0
+    half = num_sample / 2
+    ys_train = []
+    Xs_train = []
+    ys_test = []
+    Xs_test = []
+    # search for y = 1
+    for i, y in enumerate(ys):
+        if y == 1 and counter < half:
+            ys_train.append(y)
+            Xs_train.append(Xs.iloc[i])
+            counter = counter + 1
+        if y == 1 and counter >= half:
+            ys_test.append(y)
+            Xs_test.append(Xs.iloc[i])
+    # search for y = 0
+    for i, y in enumerate(ys):
+        if y == 0 and len(ys_train) < num_sample:
+            ys_train.append(y)
+            Xs_train.append(Xs.iloc[i])
+        if y == 0 and len(ys_train) >= num_sample:
+            ys_test.append(y)
+            Xs_test.append(Xs.iloc[i])
+    return Xs_train, Xs_test, ys_train, ys_test

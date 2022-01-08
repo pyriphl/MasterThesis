@@ -1,6 +1,7 @@
 ALN_PATH = 'data/AlignedSequences/'
 # SIMPHY_PATH = 'data/Simphy/no_trans/'
-SIMPHY_PATH = 'data/Simphy/predefined_tree/'
+# SIMPHY_PATH = 'data/Simphy/predefined_tree/'
+SIMPHY_PATH = 'data/Simphy/training_set/'
 # SIMPHY_PATH = 'data/Simphy/test/'
 PICTURE_PATH = SIMPHY_PATH + 'pictures/'
 FILE_PATH = SIMPHY_PATH + 'results/'

@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy
+import pandas
+import sklearn
 from Bio import Phylo
 from matplotlib import ticker, pyplot as plt
 from matplotlib.widgets import Slider
 from tabulate import tabulate
 import numpy as np
+import seaborn as sns
 
 from src.data_processing import interpolation_3d, interpolation_2d, reduce_to_list, linear_regression, build_pair_label, \
     build_dist_list
@@ -284,4 +287,26 @@ def plot_boxplot(ts, names):
     fig, ax = plt.subplots()
     ax.boxplot(data, labels=names)
     ax.set_title('Boxplot')
+    plt.show()
+
+def plot_confusion_matrix(y_test, y_pred, y_pred_proba):
+    cnf_matrix = sklearn.metrics.confusion_matrix(y_test, y_pred)
+    class_names = [0, 1]  # name  of classes
+    fig, ax = plt.subplots()
+    tick_marks = np.arange(len(class_names))
+    plt.xticks(tick_marks, class_names)
+    plt.yticks(tick_marks, class_names)
+    # create heatmap
+    sns.heatmap(pandas.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu", fmt='g')
+    ax.xaxis.set_label_position("top")
+    plt.tight_layout()
+    plt.title('Confusion matrix', y=1.1)
+    plt.ylabel('Actual label')
+    plt.xlabel('Predicted label')
+
+    fig, ax = plt.subplots()
+    fpr, tpr, _ = sklearn.metrics.roc_curve(y_test, y_pred_proba)
+    auc = sklearn.metrics.roc_auc_score(y_test, y_pred_proba)
+    plt.plot(fpr, tpr, label="data 1, auc=" + str(auc))
+    plt.legend(loc=4)
     plt.show()

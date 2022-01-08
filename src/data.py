@@ -107,3 +107,7 @@ class dataframe:
 
     def read_pd_dataframe(self):
         self.pd_dataframe = pandas.read_csv(CSV_PATH + 'results.csv')
+
+    def read_y(self):
+        dataframe = pandas.read_csv(CSV_PATH + 'results_y.csv')
+        self.ys = dataframe.y
