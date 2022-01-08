@@ -1,0 +1,1 @@
+./SimPhy_1.0.2/bin/simphy_lnx64 -sb f:0.1 -lt f:0.2 -rs 1 -rl f:2 -rg 1 -sp f:10 -su f:0.1 -sg f:1 -sl f:5 -st f:2 -v 2 -om 1 -od 1 -op 1 -oc 1 -on 1 -o data/Simphy/predefined_tree/ 
