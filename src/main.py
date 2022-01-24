@@ -4,17 +4,23 @@ import sklearn
 from cogent3 import load_aligned_seqs
 from cogent3.evolve import models
 from Bio import Phylo
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
 
 import data
-from src.data_processing import correlation, reduce_to_list, logistic_regression, training_data_split
+from src.data_processing import correlation, reduce_to_list, training_data_split, classification
 from src.distance_compare import compare_sw_results_correlation, compare_sw_results_linreg
-from src.distance_calculation import sliding_window_dist
+from src.distance_calculation import sliding_window_dist, Kuhner_Felsenstein_dist
 from src.fileIO import delete_folder, load_tree, load_aln, write_data, load_distance, load_tags, create_dir, \
     load_partitions_as_aln, write_distances, load_distances
 from src.path import ALN_PATH, SIMPHY_PATH, PICTURE_PATH, FILE_PATH, WINDOW_SIZE
 from src.show import plot_points_scatter, show_table, plot_surface, plot_histogram_3d, plot_histogram_2d, \
     plot_histogram_2d_onplanes, plot_histogram_2d_group, plot_histogram_2d_compare, plot_sliding_window, \
-    plot_correlation_sw, show_compare_sw_results_linreg, plot_boxplot, plot_confusion_matrix
+    plot_correlation_sw, show_compare_sw_results_linreg, plot_boxplot, plot_confusion_matrix, plot_result_distribution, \
+    plot_decision_boundary, plot_decision_boundary_svm, plot_ROC
 from src.sample_generation import sequence_generation_indelible, tree_generation_simphy
 from src.seq_operations import get_by_name, calculate_distance_aligned_seq, dist_window_average, \
     SLIDING_STEP
@@ -34,9 +40,14 @@ if __name__ == '__main__':
     # sequence_generation_indelible(SIMPHY_PATH, "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
     # sequence_generation_indelible("data/Simphy/temp/", "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
 
+    # tree1 = load_tree(SIMPHY_PATH + "01" + '/g_trees1.trees', 'newick')
+    # tree2 = load_tree(SIMPHY_PATH + "01" + '/g_trees2.trees', 'newick')
+    # KF_dist = Kuhner_Felsenstein_dist(tree1, tree2)
+    # print(KF_dist)
+
     Xs_list = []
     data_list = []
-    for i in range(1, 21):
+    for i in range(1, 51):
         model = 'JC69'
         num = f'{i:02d}'
         s_tree = load_tree(SIMPHY_PATH + num + '/s_tree.trees', 'newick')
@@ -64,18 +75,24 @@ if __name__ == '__main__':
     colums = ['error', 'slope']
     Xs = data_frame.pd_dataframe[colums]
     ys = data_frame.ys
-    print(len(Xs))
-    x_train, x_test, y_train, y_test = training_data_split(Xs ,ys ,90)
+    model = LogisticRegression
+    # print(len(Xs))
+    x_train, x_test, y_train, y_test = training_data_split(Xs ,ys ,160)
     # x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(Xs, ys, test_size=0.10, random_state=4)
-    y_pred, y_pred_proba = logistic_regression(x_train, y_train, Xs)
-    print(len(y_test))
-    print(y_pred.shape)
-    plot_confusion_matrix(ys, y_pred,y_pred_proba)
-    #     ####################################################################
-    #     model_distance = load_distance(TXT_PATH + num + '/' + 'model_dist.txt')
-    #     tree_distance = load_distance(TXT_PATH + num + '/' + 'tree_dist.txt')
-    #     model_distance_list = load_distances(FILE_PATH + num + '/')
-    #     names = load_tags(FILE_PATH + num + '/' + 'tags.txt')
+    y_pred, y_pred_proba_1, y_pred_proba_0 = classification(x_train, y_train, Xs, model)
+    # random forest n_estimators = 1000, random_state = 42
+    # print(len(y_test))
+    # print(y_pred.shape)
+    plot_confusion_matrix(ys, y_pred, model.__name__)
+    plot_ROC(ys, y_pred_proba_1, model.__name__)
+    # plot_result_distribution(data_frame.pd_dataframe)
+    plot_decision_boundary(x_train,y_train, model.__name__, model)
+    # plot_decision_boundary_svm(x_train, y_train, 'polynomial')
+        ####################################################################
+        # model_distance = load_distance(TXT_PATH + num + '/' + 'model_dist.txt')
+        # tree_distance = load_distance(TXT_PATH + num + '/' + 'tree_dist.txt')
+        # model_distance_list = load_distances(FILE_PATH + num + '/')
+        # names = load_tags(FILE_PATH + num + '/' + 'tags.txt')
     ####################################################################
     # create_dir(PICTURE_PATH)
     # create_dir(PICTURE_PATH + num + '/')

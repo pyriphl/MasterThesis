@@ -87,7 +87,8 @@ class dataframe:
                                                                        data.taxa_names,
                                                                        PICTURE_PATH + data.id + '/linear_regression/')
             id_names = [data.id + name for name in names]
-            xs = numpy.array((errors, slopes, id_names))
+            slopes_abs = [abs(s) for s in slopes]
+            xs = numpy.array((errors, slopes_abs, id_names))
             # print(Xs.shape)
             # print(xs.shape)
             if is_empty:
@@ -111,3 +112,4 @@ class dataframe:
     def read_y(self):
         dataframe = pandas.read_csv(CSV_PATH + 'results_y.csv')
         self.ys = dataframe.y
+        self.pd_dataframe = dataframe

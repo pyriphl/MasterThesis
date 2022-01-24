@@ -5,6 +5,8 @@ import sklearn
 from Bio import Phylo
 from matplotlib import ticker, pyplot as plt
 from matplotlib.widgets import Slider
+from sklearn import svm
+from sklearn.linear_model import LogisticRegression
 from tabulate import tabulate
 import numpy as np
 import seaborn as sns
@@ -289,24 +291,197 @@ def plot_boxplot(ts, names):
     ax.set_title('Boxplot')
     plt.show()
 
-def plot_confusion_matrix(y_test, y_pred, y_pred_proba):
+def plot_confusion_matrix(y_test, y_pred, model):
     cnf_matrix = sklearn.metrics.confusion_matrix(y_test, y_pred)
     class_names = [0, 1]  # name  of classes
-    fig, ax = plt.subplots()
+    fig1, ax = plt.subplots(figsize=(7, 5))
     tick_marks = np.arange(len(class_names))
     plt.xticks(tick_marks, class_names)
     plt.yticks(tick_marks, class_names)
     # create heatmap
     sns.heatmap(pandas.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu", fmt='g')
-    ax.xaxis.set_label_position("top")
-    plt.tight_layout()
-    plt.title('Confusion matrix', y=1.1)
+    # ax.xaxis.set_label_position("top")
+    # plt.tight_layout()
+    plt.title('Confusion matrix')
     plt.ylabel('Actual label')
     plt.xlabel('Predicted label')
-
-    fig, ax = plt.subplots()
+    plt.savefig(PICTURE_PATH + model+"_heatmap.png")
+    # plt.show()
+def plot_ROC(y_test, y_pred_proba, model):
+    fig2, ax = plt.subplots()
     fpr, tpr, _ = sklearn.metrics.roc_curve(y_test, y_pred_proba)
     auc = sklearn.metrics.roc_auc_score(y_test, y_pred_proba)
     plt.plot(fpr, tpr, label="data 1, auc=" + str(auc))
     plt.legend(loc=4)
+    plt.title("Receiver Operating Characteristic(ROC) curve")
+    plt.ylabel('True positive rate')
+    plt.xlabel('False positive rate')
+    plt.savefig(PICTURE_PATH + model +"roc.png")
+    # plt.show()
+
+def plot_result_distribution(pd_dataframe):
+    fig1, ax = plt.subplots(figsize=(7, 5))
+    colums = ['error', 'slope']
+    df_y1 = pd_dataframe[pd_dataframe['y']==1]
+    df_y0 = pd_dataframe[pd_dataframe['y']==0]
+    os_xs = df_y0['error']
+    os_ys = df_y0['slope']
+    xs_xs = df_y1['error']
+    xs_ys = df_y1['slope']
+    ax.scatter(os_xs, os_ys, marker='o')
+    ax.scatter(xs_xs, xs_ys, marker='x')
+    plt.ylabel('slopes')
+    plt.xlabel('errors')
+    plt.savefig(PICTURE_PATH + "data.png")
+def plot_decision_boundary_svm(X, y, kernel_type):
+    try:
+        X = np.array(X)
+        y = np.array(y).flatten()
+    except:
+        print("Coercing input data to NumPy arrays failed")
+    # Reduces to the first two columns of data
+    reduced_data = X[:, :2]
+    # Instantiate the model object
+    model = svm.SVC(kernel=kernel_type)
+    # Fits the model with the reduced data
+    model.fit(reduced_data, y)
+
+
+    # Step size of the mesh. Decrease to increase the quality of the VQ.
+    h = .00002  # point in the mesh [x_min, m_max]x[y_min, y_max].
+    p = 0.001
+
+    # Plot the decision boundary. For that, we will assign a color to each
+    x_min, x_max = reduced_data[:, 0].min() - p, reduced_data[:, 0].max() + p
+    y_min, y_max = reduced_data[:, 1].min() - p, reduced_data[:, 1].max() + p
+    # Meshgrid creation
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+    # Obtain labels for each point in mesh using the model.
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    x_min, x_max = X[:, 0].min() - p, X[:, 0].max() + p
+    y_min, y_max = X[:, 1].min() - p, X[:, 1].max() + p
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.0001),
+                         np.arange(y_min, y_max, 0.0001))
+
+    # Predictions to obtain the classification results
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+
+    # Plotting
+    plt.contourf(xx, yy, Z, alpha=0.4)
+    plt.scatter(X[:, 0], X[:, 1], c=y, alpha=0.8)
+    plt.xlabel("Feature-1", fontsize=15)
+    plt.ylabel("Feature-2", fontsize=15)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.show()
+    return plt
+def plot_decision_boundary(X, y, name, model_class, **model_params):
+    """
+        Function to plot the decision boundaries of a classification model.
+        This uses just the first two columns of the data for fitting
+        the model as we need to find the predicted value for every point in
+        scatter plot.
+        Arguments:
+                X: Feature data as a NumPy-type array.
+                y: Label data as a NumPy-type array.
+                model_class: A Scikit-learn ML estimator class
+                e.g. GaussianNB (imported from sklearn.naive_bayes) or
+                LogisticRegression (imported from sklearn.linear_model)
+                **model_params: Model parameters to be passed on to the ML estimator
+
+        Typical code example:
+                plt.figure()
+                plt.title("KNN decision boundary with neighbros: 5",fontsize=16)
+                plot_decision_boundaries(X_train,y_train,KNeighborsClassifier,n_neighbors=5)
+                plt.show()
+        """
+    try:
+        X = np.array(X)
+        y = np.array(y).flatten()
+    except:
+        print("Coercing input data to NumPy arrays failed")
+    # Reduces to the first two columns of data
+    reduced_data = X[:, :2]
+    # Instantiate the model object
+    model = model_class(**model_params)
+    # Fits the model with the reduced data
+    model.fit(reduced_data, y)
+
+
+    # Step size of the mesh. Decrease to increase the quality of the VQ.
+    h = .0001  # point in the mesh [x_min, m_max]x[y_min, y_max].
+    p = 0.001
+
+    # Plot the decision boundary. For that, we will assign a color to each
+    x_min, x_max = reduced_data[:, 0].min() - p, reduced_data[:, 0].max() + p
+    y_min, y_max = reduced_data[:, 1].min() - p, reduced_data[:, 1].max() + p
+    # Meshgrid creation
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+    # Obtain labels for each point in mesh using the model.
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    x_min, x_max = X[:, 0].min() - p, X[:, 0].max() + p
+    y_min, y_max = X[:, 1].min() - p, X[:, 1].max() + p
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.00001),
+                         np.arange(y_min, y_max, 0.00001))
+
+    # Predictions to obtain the classification results
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+
+    # Plotting
+    fig1, ax = plt.subplots(figsize=(10, 5))
+    plt.contourf(xx, yy, Z, alpha=0.4)
+    plt.scatter(X[:, 0], X[:, 1], c=y, alpha=0.8)
+    plt.xlabel("error", fontsize=15)
+    plt.ylabel("slope", fontsize=15)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.title(name)
+    plt.savefig(PICTURE_PATH + name+".png")
+    # plt.show()
+    return plt
+
+
+# def plot_decision_boundary( X, y, X_train, y_train):
+#     # X_array = X.values
+#     X_array = np.array(X_train)
+#     X = X.to_numpy()
+#     # define bounds of the domain
+#     min1, max1 = X_array[:, 0].min() - 0.001, X_array[:, 0].max() + 0.001
+#     min2, max2 = X_array[:, 1].min() - 0.001, X_array[:, 1].max() + 0.001
+#     # define the x and y scale
+#     x1grid = np.arange(min1, max1, 0.0001)
+#     x2grid = np.arange(min2, max2, 0.0001)
+#     # create all of the lines and rows of the grid
+#     xx, yy = np.meshgrid(x1grid, x2grid)
+#     # flatten each grid to a vector
+#     r1, r2 = xx.flatten(), yy.flatten()
+#     r1, r2 = r1.reshape((len(r1), 1)), r2.reshape((len(r2), 1))
+#     # horizontal stack vectors to create x1,x2 input for the model
+#     grid = np.hstack((r1, r2))
+#     # define the model
+#     model = LogisticRegression()
+#     # fit the model
+#     model.fit(X_train, y_train)
+#     # make predictions for the grid
+#     yhat = model.predict(grid)
+#     # yhat = model.predict_proba(grid)
+#     # keep just the probabilities for class 0
+#     # yhat = yhat[:, 1]
+#     # reshape the predictions back into a grid
+#     zz = yhat.reshape(xx.shape)
+#     # plot the grid of x, y and z values as a surface
+#     plt.contourf(xx, yy, zz, cmap='Paired')
+#     # c = plt.contourf(xx, yy, zz, cmap='RdBu')
+#     # add a legend, called a color bar
+#     # plt.colorbar(c)
+#     # create scatter plot for samples from each class
+#     for class_value in range(2):
+#         # get row indexes for samples with this class
+#         row_ix = np.where(y == class_value)
+#         # create scatter of these samples
+#         plt.scatter(X[row_ix, 0], X[row_ix, 1], cmap='Paired')
+#     plt.show()

@@ -1,4 +1,5 @@
 import itertools
+from collections import defaultdict
 
 import numpy
 
@@ -49,3 +50,25 @@ def pairwise_node_dist(names, tree):
             dist = len(trace)
             dists[i][j] = dist - 1 if dist > 1 else 0
     return dists
+
+def get_partitions(tree, partition_all):
+    terminals = tree.get_terminals()
+    non_terminals = tree.get_nonterminals()
+    partitions = {}
+    # init partitions
+    for pair in partition_all:
+        partitions.setdefault(pair, 0)
+
+    n = len(terminals) # number of taxa
+    for i in range(0,n):
+        for j in range(i+1,n):
+            for clade in non_terminals:
+                if not clade.is_preterminal():
+                    continue
+                if clade.is_parent_of(terminals[i]) and clade.is_parent_of(terminals[j]):
+                    partitions[(terminals[i].name, terminals[j].name)] = clade.branch_length
+                    partitions[(terminals[j].name, terminals[i].name)] = clade.branch_length
+    for t in terminals:
+        partitions[(t.name, 'none')] = t.branch_length
+        partitions[('none', t.name)] = t.branch_length
+    return partitions

@@ -124,17 +124,18 @@ def build_dist_list(t):
     return result
 
 
-def logistic_regression(X, y, xtest):
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
-    X_train = X
-    y_train = y
-    # X_test = X
-    logreg = LogisticRegression()
-    logreg.fit(X_train, y_train)
-    y_pred = logreg.predict(xtest)
-    y_pred_proba = logreg.predict_proba(xtest)[::, 1]
-    return y_pred, y_pred_proba
+def classification(X, y, xtest, model_class, **model_params):
+    # Instantiate the model object
+    model = model_class(**model_params)
+    # Fits the model with the reduced data
+    model.fit(X, y)
+    y_pred = model.predict(xtest)
+    y_pred_proba_1 = model.predict_proba(xtest)[::, 1]
+    y_pred_proba_0 = model.predict_proba(xtest)[::, 0]
+    return y_pred, y_pred_proba_1, y_pred_proba_0
 
+# def random_forest():
+#
 
 # split the training data uniformly
 def training_data_split(Xs, ys, num_sample):
