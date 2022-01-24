@@ -1,0 +1,15 @@
+[TYPE] NUCLEOTIDE 1	
+			
+
+[SETTINGS]
+	[fastaextension]	fasta  
+
+[MODEL] complex_common	
+	[submodel]	GTR 0.006974 0.020075 0.003476 0.011621 0.021093 
+	[statefreq] 0.244707 0.490274 0.216252 0.048767 
+	
+
+
+
+
+[EVOLVE] 

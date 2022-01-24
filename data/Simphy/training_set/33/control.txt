@@ -1,0 +1,20 @@
+[TYPE] NUCLEOTIDE 1	
+			
+
+[SETTINGS]
+	[fastaextension]	fasta  
+
+[MODEL] complex_common	
+	[submodel]	GTR 0.011985 0.034890 0.003312 0.005931 0.035719 
+	[statefreq] 0.009477 0.243527 0.305182 0.441813 
+	
+
+
+[TREE] T1 ((3_0_0:0.23490152,(2_0_0:0.10119108,1_0_0:0.10119108):0.13371044):0.26509848,(4_0_0:0.23490152,5_0_0:0.23490152):0.26509848);
+[TREE] T2 (((3_0_0:0.13490152,5_0_0:0.13490152):0.1,(2_0_0:0.10119108,1_0_0:0.10119108):0.13371044):0.76509848,4_0_0:1);
+
+[PARTITIONS] complex_1 [T1 complex_common 500]
+[PARTITIONS] complex_2 [T2 complex_common 500]
+
+[EVOLVE] complex_1 1 data_1
+complex_2 1 data_2
