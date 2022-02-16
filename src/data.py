@@ -7,6 +7,7 @@ from src.distance_compare import compare_sw_results_linreg
 from src.fileIO import create_dir, write_distances, write_distance, write_tags, load_tags, load_distance, load_distances
 from src.path import WINDOW_SIZE, STEP_SIZE, PICTURE_PATH, FILE_PATH, CSV_PATH
 from src.seq_operations import dist_window_average
+from src.show import plot_sliding_window
 from src.tree_operation import pairwise_terminal_dist
 
 
@@ -69,6 +70,10 @@ class dataset:
             Phylo.draw(tree, do_show=False)
             plt.savefig(PICTURE_PATH + self.id + '/g_tree'+str(counter)+'.png')
             counter = counter+1
+    def plot_sliding_window(self):
+        create_dir(PICTURE_PATH + self.id + '/sliding_window/')
+        plot_sliding_window(self.sliding_window_distance_list, self.seq_length - WINDOW_SIZE, 1, self.taxa_names,
+                            PICTURE_PATH + self.id + '/sliding_window/')
 
 # a group of data that contains multiple datasets, may be used for ML methods
 class dataframe:

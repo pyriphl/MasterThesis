@@ -224,7 +224,7 @@ def plot_sliding_window(ts, end, step, names, output):
             plt.savefig(output + titles[count])  # save fig
             count = count + 1
 
-    plt.show()
+    # plt.show()
 
 
 def plot_correlation_sw(xs, ys_list, min_x, max_x):
@@ -272,6 +272,8 @@ def show_compare_sw_results_linreg(xs, ys, y_pred, text, title, output):
     # ax.set_ylabel('model distance')
     text = "squared error = " + str(text[0]) + "\nslope = " + str(text[1])
     ax.text(0.5, 0.8, text, fontsize=8, transform=fig.transFigure)
+    ax.set_xlabel('sliding window position')
+    ax.set_ylabel('normalized distance')
     plt.title(title)
     plt.savefig(output)
     # plt.show()
