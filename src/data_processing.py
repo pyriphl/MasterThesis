@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 
 # model type : 'nearest', 'linear', 'cubic'
 from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 
 
 def interpolation_3d(table, model):
@@ -134,8 +135,16 @@ def classification(X, y, xtest, model_class, **model_params):
     y_pred_proba_0 = model.predict_proba(xtest)[::, 0]
     return y_pred, y_pred_proba_1, y_pred_proba_0
 
-# def random_forest():
-#
+def classification_svm(X, y, xtest, kernel):
+    # Instantiate the model object
+    model = SVC(kernel=kernel, probability=True)
+    # Fits the model with the reduced data
+    model.fit(X, y)
+    y_pred = model.predict(xtest)
+    y_pred_proba_1 = model.predict_proba(xtest)[::, 1]
+    y_pred_proba_0 = model.predict_proba(xtest)[::, 0]
+    return y_pred, y_pred_proba_1, y_pred_proba_0
+
 
 # split the training data uniformly
 def training_data_split(Xs, ys, num_sample):

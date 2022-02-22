@@ -8,10 +8,11 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import LinearSVC, SVC
 from xgboost import XGBClassifier
 
 import data
-from src.data_processing import correlation, reduce_to_list, training_data_split, classification
+from src.data_processing import correlation, reduce_to_list, training_data_split, classification, classification_svm
 from src.distance_compare import compare_sw_results_correlation, compare_sw_results_linreg
 from src.distance_calculation import sliding_window_dist, Kuhner_Felsenstein_dist
 from src.fileIO import delete_folder, load_tree, load_aln, write_data, load_distance, load_tags, create_dir, \
@@ -69,26 +70,29 @@ if __name__ == '__main__':
         data_list.append(d)
     data_frame = data.dataframe(data_list)
     # data_frame.save_trees()
-    data_frame.calculate_pd_dataframe()
+    # data_frame.calculate_pd_dataframe()
     # data_frame.write_pd_dataframe()
-    # data_frame.read_pd_dataframe()
-    # data_frame.read_y()
-    # colums = ['error', 'slope']
-    # Xs = data_frame.pd_dataframe[colums]
-    # ys = data_frame.ys
-    # model = LogisticRegression
-    # # print(len(Xs))
-    # x_train, x_test, y_train, y_test = training_data_split(Xs ,ys ,160)
-    # # x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(Xs, ys, test_size=0.10, random_state=4)
+    data_frame.read_pd_dataframe()
+    data_frame.read_y()
+    colums = ['error', 'slope']
+    Xs = data_frame.pd_dataframe[colums]
+    ys = data_frame.ys
+    model = LogisticRegression
+    # print(len(Xs))
+    x_train, x_test, y_train, y_test = training_data_split(Xs ,ys ,160)
+    # x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(Xs, ys, test_size=0.10, random_state=4)
     # y_pred, y_pred_proba_1, y_pred_proba_0 = classification(x_train, y_train, Xs, model)
-    # # random forest n_estimators = 1000, random_state = 42
-    # # print(len(y_test))
-    # # print(y_pred.shape)
+    y_pred, y_pred_proba_1, y_pred_proba_0 = classification_svm(x_train, y_train, Xs, 'linear')
+    # random forest n_estimators = 1000, random_state = 42
+    # print(len(y_test))
+    # print(y_pred.shape)
     # plot_confusion_matrix(ys, y_pred, model.__name__)
     # plot_ROC(ys, y_pred_proba_1, model.__name__)
-    # # plot_result_distribution(data_frame.pd_dataframe)
+    # plot_confusion_matrix(ys, y_pred, 'SVM_linear') #SVM
+    # plot_ROC(ys, y_pred_proba_1, 'SVM_linear') #SVM
+    # plot_result_distribution(data_frame.pd_dataframe)
     # plot_decision_boundary(x_train,y_train, model.__name__, model)
-    # # plot_decision_boundary_svm(x_train, y_train, 'polynomial')
+    plot_decision_boundary_svm(x_train, y_train, 'linear')
         ####################################################################
         # model_distance = load_distance(TXT_PATH + num + '/' + 'model_dist.txt')
         # tree_distance = load_distance(TXT_PATH + num + '/' + 'tree_dist.txt')
