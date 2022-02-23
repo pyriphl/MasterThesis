@@ -370,15 +370,17 @@ def plot_decision_boundary_svm(X, y, kernel_type):
     # Predictions to obtain the classification results
     Z = model.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
 
-    # Plotting
+
+    fig1, ax = plt.subplots(figsize=(10, 5))
     plt.contourf(xx, yy, Z, alpha=0.4)
     plt.scatter(X[:, 0], X[:, 1], c=y, alpha=0.8)
-    plt.xlabel("Feature-1", fontsize=15)
-    plt.ylabel("Feature-2", fontsize=15)
+    plt.xlabel("error", fontsize=15)
+    plt.ylabel("slope", fontsize=15)
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
-    plt.show()
-    return plt
+    plt.title('SVM_linar')
+    plt.savefig(PICTURE_PATH + 'SVM_linear' + ".png")
+    # plt.show()
 def plot_decision_boundary(X, y, name, model_class, **model_params):
     """
         Function to plot the decision boundaries of a classification model.
