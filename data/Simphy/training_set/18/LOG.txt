@@ -1,19 +1,19 @@
 ********************************************************************************
-INDELible V1.03 by Will Fletcher : Simulation began at: Fri Jan  7 12:53:00 2022
+INDELible V1.03 by Will Fletcher : Simulation began at: Sat Feb 26 19:33:43 2022
 ********************************************************************************
 
-  * Block 1 was completed in 0.000481 seconds.
-
-********************************************************************************
-
-
-  * Block 2 was completed in 0.000404 seconds.
+  * Block 1 was completed in 0.000432 seconds.
 
 ********************************************************************************
 
-  * Simulation completed. Whole batch took: 0.001315 seconds.
 
-INDELible V1.03 Simulations completed at: Fri Jan  7 12:53:00 2022
+  * Block 2 was completed in 0.000413 seconds.
+
+********************************************************************************
+
+  * Simulation completed. Whole batch took: 0.001334 seconds.
+
+INDELible V1.03 Simulations completed at: Sat Feb 26 19:33:43 2022
 
 ********************************************************************************
 
@@ -30,12 +30,12 @@ INDELible V1.03 Simulations completed at: Fri Jan  7 12:53:00 2022
 	[fastaextension]	fasta  
 
 [MODEL] complex_common	
-	[submodel]	GTR 0.007745 0.020147 0.004120 0.008756 0.014659 
-	[statefreq] 0.055244 0.136309 0.116992 0.691454 
+	[submodel]	GTR 0.005686 0.015734 0.001476 0.006522 0.018526 
+	[statefreq] 0.142934 0.829656 0.025364 0.002046 
 	
 
 
-[TREE] T1 (((2_0_0:0.10119108,1_0_0:0.10119108):0.13371044):0.76509848,(3_0_0:0.44490152,4_0_0:0.44490152):0.55509848);
+[TREE] T1 ((2_0_0:0.10119108,1_0_0:0.10119108):0.89880892,(3_0_0:0.44490152,4_0_0:0.44490152):0.55509848);
 [TREE] T2 ((2_0_0:0.23490152):0.76509848,(3_0_0:0.23490152,(4_0_0:0.10119108,1_0_0:0.10119108):0.14371044):0.75509848);
 
 [PARTITIONS] complex_1 [T1 complex_common 500]

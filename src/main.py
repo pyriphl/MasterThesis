@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # Phylo.draw(tree2)
     # Phylo.draw(stree)
     # delete_folder("data/Simphy/test")
-    # sequence_generation_indelible(SIMPHY_PATH, "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
+    sequence_generation_indelible(SIMPHY_PATH, "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
     # sequence_generation_indelible("data/Simphy/temp/", "SimPhy_1.0.2/configuration_files/INDELible_complex.txt")
 
     # tree1 = load_tree(SIMPHY_PATH + "01" + '/g_trees1.trees', 'newick')
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     Xs_list = []
     data_list = []
-    for i in range(1, 51):
+    for i in range(1, 71):
         model = 'JC69'
         num = f'{i:02d}'
         s_tree = load_tree(SIMPHY_PATH + num + '/s_tree.trees', 'newick')
@@ -77,22 +77,22 @@ if __name__ == '__main__':
     colums = ['error', 'slope']
     Xs = data_frame.pd_dataframe[colums]
     ys = data_frame.ys
-    model = LogisticRegression
+    model = RandomForestClassifier
     # print(len(Xs))
     x_train, x_test, y_train, y_test = training_data_split(Xs ,ys ,160)
     # x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(Xs, ys, test_size=0.10, random_state=4)
-    # y_pred, y_pred_proba_1, y_pred_proba_0 = classification(x_train, y_train, Xs, model)
-    y_pred, y_pred_proba_1, y_pred_proba_0 = classification_svm(x_train, y_train, Xs, 'linear')
+    y_pred, y_pred_proba_1, y_pred_proba_0 = classification(x_train, y_train, Xs, model, n_estimators=100, random_state=42)
+    # y_pred, y_pred_proba_1, y_pred_proba_0 = classification_svm(x_train, y_train, Xs, 'linear')
     # random forest n_estimators = 1000, random_state = 42
     # print(len(y_test))
     # print(y_pred.shape)
-    # plot_confusion_matrix(ys, y_pred, model.__name__)
-    # plot_ROC(ys, y_pred_proba_1, model.__name__)
+    plot_confusion_matrix(ys, y_pred, model.__name__)
+    plot_ROC(ys, y_pred_proba_1, model.__name__)
     # plot_confusion_matrix(ys, y_pred, 'SVM_linear') #SVM
     # plot_ROC(ys, y_pred_proba_1, 'SVM_linear') #SVM
     # plot_result_distribution(data_frame.pd_dataframe)
-    # plot_decision_boundary(x_train,y_train, model.__name__, model)
-    plot_decision_boundary_svm(x_train, y_train, 'linear')
+    plot_decision_boundary(x_train,y_train, model.__name__, model)
+    # plot_decision_boundary_svm(x_train, y_train, 'linear')
         ####################################################################
         # model_distance = load_distance(TXT_PATH + num + '/' + 'model_dist.txt')
         # tree_distance = load_distance(TXT_PATH + num + '/' + 'tree_dist.txt')

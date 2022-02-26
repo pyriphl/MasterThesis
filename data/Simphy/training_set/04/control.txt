@@ -5,8 +5,8 @@
 	[fastaextension]	fasta  
 
 [MODEL] complex_common	
-	[submodel]	GTR 0.008231 0.027573 0.005153 0.028506 0.031297 
-	[statefreq] 0.237341 0.057906 0.116852 0.587901 
+	[submodel]	GTR 0.003939 0.038227 0.006588 0.009153 0.056362 
+	[statefreq] 0.600573 0.206831 0.071910 0.120685 
 	
 
 

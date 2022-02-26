@@ -1,19 +1,19 @@
 ********************************************************************************
-INDELible V1.03 by Will Fletcher : Simulation began at: Fri Jan  7 12:53:00 2022
+INDELible V1.03 by Will Fletcher : Simulation began at: Sat Feb 26 19:33:43 2022
 ********************************************************************************
 
-  * Block 1 was completed in 0.000963 seconds.
-
-********************************************************************************
-
-
-  * Block 2 was completed in 0.000865 seconds.
+  * Block 1 was completed in 0.00061 seconds.
 
 ********************************************************************************
 
-  * Simulation completed. Whole batch took: 0.002734 seconds.
 
-INDELible V1.03 Simulations completed at: Fri Jan  7 12:53:00 2022
+  * Block 2 was completed in 0.000575 seconds.
+
+********************************************************************************
+
+  * Simulation completed. Whole batch took: 0.0017 seconds.
+
+INDELible V1.03 Simulations completed at: Sat Feb 26 19:33:43 2022
 
 ********************************************************************************
 
@@ -30,8 +30,8 @@ INDELible V1.03 Simulations completed at: Fri Jan  7 12:53:00 2022
 	[fastaextension]	fasta  
 
 [MODEL] complex_common	
-	[submodel]	GTR 0.006851 0.020483 0.001164 0.024357 0.028072 
-	[statefreq] 0.455154 0.116729 0.173266 0.254851 
+	[submodel]	GTR 0.019681 0.019732 0.002824 0.014842 0.043289 
+	[statefreq] 0.103693 0.176131 0.386101 0.334075 
 	
 
 
